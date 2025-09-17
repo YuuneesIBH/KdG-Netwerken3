@@ -1,0 +1,45 @@
+# ================================
+# VYOS CONFIG (binnen de VM VyOS)
+# ================================
+
+configure
+
+# Interfaces instellen
+set interfaces ethernet eth0 address 192.168.56.101/24
+set interfaces ethernet eth0 description 'Host-Only#1'
+
+set interfaces ethernet eth1 address 192.168.200.101/24
+set interfaces ethernet eth1 description 'Internal naar Slitaz/Ubuntu'
+
+# Hostname zetten (optioneel)
+set system host-name vyos-router
+
+# Config toepassen
+commit
+save
+exit
+
+# Check of interfaces up zijn
+show interfaces
+# Je moet eth0 en eth1 zien met hun IP's
+
+# ================================
+# MACOS HOST CONFIG (terminal)
+# ================================
+
+# Geef Mac een statisch IP in hetzelfde subnet
+sudo ifconfig en0 192.168.56.1 netmask 255.255.255.0 up
+# (let op: soms is het niet en0 maar en1 of een andere adapter → check met ifconfig)
+
+# Test van Mac naar VyOS
+ping 192.168.56.101
+
+# ================================
+# TESTS VANUIT VYOS
+# ================================
+
+# Ping terug naar je Mac
+ping 192.168.56.1
+
+# (later als Ubuntu/Slitaz draait met 192.168.200.102)
+ping 192.168.200.102
