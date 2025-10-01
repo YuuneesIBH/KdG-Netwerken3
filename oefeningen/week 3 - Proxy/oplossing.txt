@@ -1,0 +1,777 @@
+# Eerst installeer ik de nodig packages:
+ubuntu@ubuntu:~$ sudo apt install squid curl e2guardian clamav-daemon clamav-testfiles
+[sudo] password for ubuntu: 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  clamav clamav-base clamav-freshclam clamdscan libclamav12 libcurl4
+  libdbi-perl libecap3 libmspack0 logrotate squid-common squid-langpack
+Suggested packages:
+  libclamunrar clamav-doc daemon libclamunrar11 libmldbm-perl
+  libnet-daemon-perl libsql-statement-perl bsd-mailx | mailx squidclient
+  squid-cgi squid-purge resolvconf smbclient ufw winbind
+The following NEW packages will be installed:
+  clamav clamav-base clamav-daemon clamav-freshclam clamav-testfiles clamdscan
+  e2guardian libclamav12 libdbi-perl libecap3 libmspack0 logrotate squid
+  squid-common squid-langpack
+
+-EERST UPDATE WANT HAD ISSUES
+ubuntu@ubuntu:~$ sudo apt update
+Hit:1 http://ports.ubuntu.com/ubuntu-ports jammy InRelease
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [128 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [127 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [129 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 Packages [2769 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main Translation-en [463 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 DEP-11 Metadata [112 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 Packages [4372 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted Translation-en [858 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 DEP-11 Metadata [212 B]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 Packages [1245 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe Translation-en [306 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 DEP-11 Metadata [356 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 DEP-11 Metadata [212 B]
+Get:15 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 DEP-11 Metadata [3580 B]
+Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-backports/restricted arm64 DEP-11 Metadata [212 B]
+Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 Packages [28.4 kB]
+Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 DEP-11 Metadata [9300 B]
+Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe DEP-11 48x48 Icons [19.7 kB]
+Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe DEP-11 64x64 Icons [28.2 kB]
+Get:21 http://ports.ubuntu.com/ubuntu-ports jammy-backports/multiverse arm64 DEP-11 Metadata [212 B]
+Get:22 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 Packages [2492 kB]
+Get:23 http://ports.ubuntu.com/ubuntu-ports jammy-security/main Translation-en [394 kB]
+Get:24 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 DEP-11 Metadata [54.6 kB]
+Get:25 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 Packages [4124 kB]
+Get:26 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted Translation-en [818 kB]
+Get:27 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 DEP-11 Metadata [208 B]
+Get:28 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 Packages [1015 kB]
+Get:29 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe Translation-en [218 kB]
+Get:30 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 DEP-11 Metadata [125 kB]
+Get:31 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 DEP-11 Metadata [208 B]
+Fetched 20.2 MB in 6s (3604 kB/s)                                 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+479 packages can be upgraded. Run 'apt list --upgradable' to see them.
+ubuntu@ubuntu:~$ sudo apt --fix-missing install squid curl e2guardian clamav-daemon clamav-testfiles -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  clamav clamav-base clamav-freshclam clamdscan libclamav12 libcurl4
+  libdbi-perl libecap3 libmspack0 logrotate squid-common squid-langpack
+Suggested packages:
+  libclamunrar clamav-doc daemon libclamunrar11 libmldbm-perl
+  libnet-daemon-perl libsql-statement-perl bsd-mailx | mailx squidclient
+  squid-cgi squid-purge resolvconf smbclient ufw winbind
+The following NEW packages will be installed:
+  clamav clamav-base clamav-daemon clamav-freshclam clamav-testfiles clamdscan
+  e2guardian libclamav12 libdbi-perl libecap3 libmspack0 logrotate squid
+  squid-common squid-langpack
+The following packages will be upgraded:
+  curl libcurl4
+2 upgraded, 15 newly installed, 0 to remove and 477 not upgraded.
+Need to get 474 kB/14.4 MB of archives.
+After this operation, 53.9 MB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 curl arm64 7.81.0-1ubuntu1.21 [190 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libcurl4 arm64 7.81.0-1ubuntu1.21 [284 kB]
+Fetched 474 kB in 1s (545 kB/s)  
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package logrotate.
+(Reading database ... 173656 files and directories currently installed.)
+Preparing to unpack .../00-logrotate_3.19.0-1ubuntu1.1_arm64.deb ...
+Unpacking logrotate (3.19.0-1ubuntu1.1) ...
+Selecting previously unselected package clamav-base.
+Preparing to unpack .../01-clamav-base_1.4.3+dfsg-0ubuntu0.22.04.1_all.deb ...
+Unpacking clamav-base (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Preparing to unpack .../02-curl_7.81.0-1ubuntu1.21_arm64.deb ...
+Unpacking curl (7.81.0-1ubuntu1.21) over (7.81.0-1ubuntu1.14) ...
+Preparing to unpack .../03-libcurl4_7.81.0-1ubuntu1.21_arm64.deb ...
+Unpacking libcurl4:arm64 (7.81.0-1ubuntu1.21) over (7.81.0-1ubuntu1.14) ...
+Selecting previously unselected package libmspack0:arm64.
+Preparing to unpack .../04-libmspack0_0.10.1-2build2_arm64.deb ...
+Unpacking libmspack0:arm64 (0.10.1-2build2) ...
+Selecting previously unselected package libclamav12:arm64.
+Preparing to unpack .../05-libclamav12_1.4.3+dfsg-0ubuntu0.22.04.1_arm64.deb ...
+Unpacking libclamav12:arm64 (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Selecting previously unselected package clamav-freshclam.
+Preparing to unpack .../06-clamav-freshclam_1.4.3+dfsg-0ubuntu0.22.04.1_arm64.de
+b ...
+Unpacking clamav-freshclam (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Selecting previously unselected package clamav-daemon.
+Preparing to unpack .../07-clamav-daemon_1.4.3+dfsg-0ubuntu0.22.04.1_arm64.deb .
+..
+Unpacking clamav-daemon (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Selecting previously unselected package e2guardian.
+Preparing to unpack .../08-e2guardian_5.3.5-3_arm64.deb ...
+Unpacking e2guardian (5.3.5-3) ...
+Selecting previously unselected package libecap3:arm64.
+Preparing to unpack .../09-libecap3_1.0.1-3.2ubuntu4_arm64.deb ...
+Unpacking libecap3:arm64 (1.0.1-3.2ubuntu4) ...
+Selecting previously unselected package squid-langpack.
+Preparing to unpack .../10-squid-langpack_20200403-1_all.deb ...
+Unpacking squid-langpack (20200403-1) ...
+Selecting previously unselected package squid-common.
+Preparing to unpack .../11-squid-common_5.9-0ubuntu0.22.04.2_all.deb ...
+Unpacking squid-common (5.9-0ubuntu0.22.04.2) ...
+Selecting previously unselected package libdbi-perl:arm64.
+Preparing to unpack .../12-libdbi-perl_1.643-3build3_arm64.deb ...
+Unpacking libdbi-perl:arm64 (1.643-3build3) ...
+Selecting previously unselected package squid.
+Preparing to unpack .../13-squid_5.9-0ubuntu0.22.04.2_arm64.deb ...
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+Unpacking squid (5.9-0ubuntu0.22.04.2) ...
+Selecting previously unselected package clamav.
+Preparing to unpack .../14-clamav_1.4.3+dfsg-0ubuntu0.22.04.1_arm64.deb ...
+Unpacking clamav (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Selecting previously unselected package clamav-testfiles.
+Preparing to unpack .../15-clamav-testfiles_1.4.3+dfsg-0ubuntu0.22.04.1_all.deb 
+...
+Unpacking clamav-testfiles (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Selecting previously unselected package clamdscan.
+Preparing to unpack .../16-clamdscan_1.4.3+dfsg-0ubuntu0.22.04.1_arm64.deb ...
+Unpacking clamdscan (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Setting up logrotate (3.19.0-1ubuntu1.1) ...
+Created symlink /etc/systemd/system/timers.target.wants/logrotate.timer \u2192 /lib/s
+ystemd/system/logrotate.timer.
+logrotate.service is a disabled or a static unit, not starting it.
+Setting up libmspack0:arm64 (0.10.1-2build2) ...
+Setting up squid-langpack (20200403-1) ...
+Setting up clamav-testfiles (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Setting up libcurl4:arm64 (7.81.0-1ubuntu1.21) ...
+Setting up curl (7.81.0-1ubuntu1.21) ...
+Setting up libdbi-perl:arm64 (1.643-3build3) ...
+Setting up libecap3:arm64 (1.0.1-3.2ubuntu4) ...
+Setting up clamav-base (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Setting up squid-common (5.9-0ubuntu0.22.04.2) ...
+Setting up squid (5.9-0ubuntu0.22.04.2) ...
+Setcap worked! /usr/lib/squid/pinger is not suid!
+Skipping profile in /etc/apparmor.d/disable: usr.sbin.squid
+Created symlink /etc/systemd/system/multi-user.target.wants/squid.service \u2192 /lib
+/systemd/system/squid.service.
+Setting up libclamav12:arm64 (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Setting up clamdscan (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Setting up clamav-freshclam (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based fronte
+nd cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Setting up clamav-daemon (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based fronte
+nd cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Setting up e2guardian (5.3.5-3) ...
+Adding system user `e2guardian' (UID 129) ...
+Adding new group `e2guardian' (GID 134) ...
+Adding new user `e2guardian' (UID 129) with group `e2guardian' ...
+Not creating home directory `/var/log/e2guardian'.
+Created symlink /etc/systemd/system/multi-user.target.wants/e2guardian.service \u2192
+ /lib/systemd/system/e2guardian.service.
+Setting up clamav (1.4.3+dfsg-0ubuntu0.22.04.1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.4) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Scanning processes...                                                           
+Scanning linux images...                                                        
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+
+
+qubuntu@ubuntu:~$ 
+
+---SNELLE CHECKS:
+ubuntu@ubuntu:~$ systemctl status squid
+\u25cf squid.service - Squid Web Proxy Server
+     Loaded: loaded (/lib/systemd/system/squid.service; enabled; vendor preset:>
+     Active: active (running) since Wed 2025-10-01 11:54:44 UTC; 1min 14s ago
+       Docs: man:squid(8)
+   Main PID: 3662 (squid)
+      Tasks: 4 (limit: 4517)
+     Memory: 15.9M
+        CPU: 102ms
+     CGroup: /system.slice/squid.service
+             \u251c\u25003662 /usr/sbin/squid --foreground -sYC
+             \u251c\u25003664 "(squid-1)" --kid squid-1 --foreground -sYC
+             \u251c\u25003665 "(logfile-daemon)" /var/log/squid/access.log
+             \u2514\u25003666 "(pinger)"
+
+Oct 01 11:54:44 ubuntu squid[3664]: Using Least Load store dir selection
+Oct 01 11:54:44 ubuntu squid[3664]: Set Current Directory to /var/spool/squid
+Oct 01 11:54:44 ubuntu squid[3664]: Finished loading MIME types and icons.
+Oct 01 11:54:44 ubuntu squid[3664]: HTCP Disabled.
+Oct 01 11:54:44 ubuntu squid[3664]: Pinger socket opened on FD 14
+Oct 01 11:54:44 ubuntu squid[3664]: Squid plugin modules loaded: 0
+Oct 01 11:54:44 ubuntu squid[3664]: Adaptation support is off.
+Oct 01 11:54:44 ubuntu squid[3664]: Accepting HTTP Socket connections at conn3 >
+Oct 01 11:54:44 ubuntu systemd[1]: Started Squid Web Proxy Server.
+ubuntu@ubuntu:~$ systemctl status e2guardian
+\u25cf e2guardian.service - E2guardian Web filtering
+     Loaded: loaded (/lib/systemd/system/e2guardian.service; enabled; vendor pr>
+     Active: active (running) since Wed 2025-10-01 11:54:46 UTC; 1min 17s ago
+       Docs: https://e2guardian.org/
+    Process: 4348 ExecStart=/usr/sbin/e2guardian (code=exited, status=0/SUCCESS)
+      Tasks: 504
+     Memory: 30.6M
+        CPU: 165ms
+     CGroup: /system.slice/e2guardian.service
+             \u2514\u25004349 /usr/sbin/e2guardian
+
+Oct 01 11:54:46 ubuntu systemd[1]: Starting E2guardian Web filtering...
+Oct 01 11:54:46 ubuntu systemd[1]: Started E2guardian Web filtering.
+Oct 01 11:54:46 ubuntu e2guardian[4349]: Started successfully.
+ubuntu@ubuntu:~$ systemctl status clamav-daemon
+\u25cb clamav-daemon.service - Clam AntiVirus userspace daemon
+     Loaded: loaded (/lib/systemd/system/clamav-daemon.service; disabled; vendo>
+    Drop-In: /etc/systemd/system/clamav-daemon.service.d
+             \u2514\u2500extend.conf
+     Active: inactive (dead)
+TriggeredBy: \u25cb clamav-daemon.socket
+       Docs: man:clamd(8)
+             man:clamd.conf(5)
+             https://docs.clamav.net/
+ubuntu@ubuntu:~$ 
+
+2) . Stel squid3 in zodat deze draait op poort 8080
+Eventuele foutmeldingen staan in /var/log/syslog of krijg je via journactl -u squid
+Logs van squid staan in de directory /var/log/squid/
+ubuntu@ubuntu:~$ grep -n "http_port" /etc/squid/squid.conf
+351:#	Since squid-3.0 use the 'disable-pmtu-discovery' flag on http_port instead.
+375:#	does (e.g., listen on http_port and forward HTTP requests).
+509:#		when user authentication depends on http_port).
+1756:#		for connections intercepted at the http_port). This is the
+1761:#	  http_port: a plain HTTP request
+1764:#	  CONNECT tunnel on http_port: same as https_port
+1830:#  TAG: http_port
+1886:#			requests with. Defaults to HTTP/1.1 for http_port and
+1892:#	   vport	Virtual host port support. Using the http_port number
+2110:#	internal address:port in http_port. This way Squid will only be
+2116:http_port 3128
+2133:#	See http_port for a list of modes and options.
+2139:#	listens for FTP client requests. See http_port directive for various
+2164:#	   intercept	Same as http_port intercept. The FTP origin address is
+2193:#	Other http_port modes and options that are not specific to HTTP and
+2708:#	an http_port (or a new connection is intercepted at an
+2776:#	See also: http_port ssl-bump, https_port ssl-bump, and acl at_step.
+4146:#			- http_port connections, but only when the
+6469:#		http_port
+ubuntu@ubuntu:~$ sudo vi /etc/squid/squid.conf
+
+
+# Squid normally listens to port 3128
+http_port 8080
+
+Ik kreeg issues met dat guardian al op 8080 runndde en heb die eerste gedisabled 
+ubuntu@ubuntu:~$ grep -n "proxyport" /etc/e2guardian/e2guardian.conf
+187:#proxyport = 3128
+ubuntu@ubuntu:~$ grep -n "port" /etc/e2guardian/e2guardian.conf | grep -v "#"
+164:filterports = 8080
+172:mapportstoips = off
+176:transparenthttpsport = 8443
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ sudo vi /etc/e2guardian/e2guardian.conf
+ubuntu@ubuntu:~$ sudo systemctl restart e2guardian
+ubuntu@ubuntu:~$ sudo systemctl restart squid
+ubuntu@ubuntu:~$ sudo ss -ltnp | grep -E "8080|8888"
+LISTEN 0      256          0.0.0.0:8888      0.0.0.0:*    users:(("e2guardian",pid=5596,fd=3))                                                                                                                                                                                  
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=6110,fd=12))                                                                                                                                                                                      
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://example.com
+<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+ubuntu@ubuntu:~$ curl -x http://localhost:8888 http://example.com
+<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+ubuntu@ubuntu:~$ 
+
+
+3. Test uit door je browser in te stellen met jezelf als proxy
+ubuntu@ubuntu:~$ tail -f /var/log/squid/access.log
+tail: cannot open '/var/log/squid/access.log' for reading: Permission denied
+tail: no files remaining
+ubuntu@ubuntu:~$ sudo tail -f /var/log/squid/access.log
+1759320545.194    400 127.0.0.1 TCP_MISS/200 1636 GET http://example.com/ - HIER_DIRECT/23.220.75.245 text/html
+^C
+ubuntu@ubuntu:~$ sudo tail -f /var/log/e2guardian/access.log
+1759320553.587		-	127.0.0.1	127.0.0.1	http://example.com	GET	200	1256	-	-	-	522	-	0	--50	-	no_name_group	1
+
+4. Schrijf een acl zodat alles van .kdg.be verboden wordt Test uit!
+ubuntu@ubuntu:~$ sudo vi /etc/squid/squid.conf
+ubuntu@ubuntu:~$ grep -n "http_access" /etc/squid/squid.conf
+470:#	on login name in http_access (proxy_auth, proxy_auth_regex or
+473:#	in http_access processing and will also be re-challenged for new
+1105:#	  # NOTE: This has no effect in http_access rules. It only has
+1140:#	  # NOTE: This has no effect in http_access rules. It only has
+1179:#	  #  http_access allow acl001
+1181:#	  #  http_access deny acl100
+1182:#	  #  http_access allow aclX markSpecial
+1500:#  TAG: http_access
+1504:#	http_access allow|deny [!]aclname ...
+1529:http_access deny !Safe_ports
+1532:http_access deny CONNECT !SSL_ports
+1535:http_access allow localhost manager
+1536:http_access deny manager
+1541:http_access allow localhost
+1549:#http_access deny to_localhost
+1553:#http_access deny to_linklocal
+1562:# http_access allow localnet
+1565:http_access deny all
+1567:#  TAG: adapted_http_access
+1570:#	Essentially identical to http_access, but runs after redirectors
+1574:#	If not set then only http_access is used.
+1579:#	Allow replies to client requests. This is complementary to http_access.
+1669:#	http_access rules to relay via this proxy.
+1915:#			http_access rules when using this.
+2160:#	http_access and adaptation_access directives are used.
+5063:#	http_access and adapted using eICAP/ICAP services (if any). If the
+5064:#	helper does not redirect the client, Squid checks adapted_http_access
+6581:#				http_access rules.
+7536:#	do not pass the 'http_access' rules.  Squid remembers the last
+7537:#	acl it evaluated in http_access, and if a 'deny_info' line exists
+7540:#	The acl is typically the last acl on the http_access deny line which
+7544:#	- When none of the http_access lines matches. It's then the last
+7545:#	  acl processed on the last http_access line.
+ubuntu@ubuntu:~$ 
+
+http_access allow localhost
+# And finally deny all other access to this proxy
+acl blokkade dstdomain .kdg.be
+http_access deny blokkade
+http_access deny all
+
+ubuntu@ubuntu:~$ sudo vi /etc/squid/squid.conf +1560
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://example.com
+<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://www.kdg.be
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href="https://www.kdg.be/">here</a>.</p>
+</body></html>
+ubuntu@ubuntu:~$ sudo systemctl restart squid
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://www.kdg.be
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href="https://www.kdg.be/">here</a>.</p>
+</body></html>
+ubuntu@ubuntu:~$ 
+
+http_access allow localhost
+# And finally deny all other access to this proxy
+acl blokkade dstdomain .kdg.be
+http_access deny CONNECT blokkade
+http_access deny blokkade
+http_access deny all
+
+5. Weg met reclame! Installeer en configureer een ad blocker voor squid. volg de procedure op de
+eerste referentie
+
+ubuntu@ubuntu:~$ sudo vi  /etc/squid/ad_block.txt
+ubuntu@ubuntu:~$ sudo vi /etc/squid/squid.conf
+ubuntu@ubuntu:~$ sudo curl -sS -L --compressed "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=nohtml&showintro=0&mimetype=plaintext" \
+ -o /etc/squid/ad_block.txt
+ubuntu@ubuntu:~$ sudo squid -k reconfigure
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://ads.doubleclick.net -I
+HTTP/1.1 502 Bad Gateway
+Server: squid/5.9
+Mime-Version: 1.0
+Date: Wed, 01 Oct 2025 12:30:36 GMT
+Content-Type: text/html;charset=utf-8
+Content-Length: 3502
+X-Squid-Error: ERR_READ_ERROR 0
+Vary: Accept-Language
+Content-Language: en
+X-Cache: MISS from ubuntu
+X-Cache-Lookup: MISS from ubuntu:8080
+Via: 1.1 ubuntu (squid/5.9)
+Connection: keep-alive
+
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ sudo tail -f /var/log/squid/access.log | grep doubleclick
+1759321836.390     24 127.0.0.1 TCP_MISS/502 361 HEAD http://ads.doubleclick.net/ - HIER_NONE/- text/html
+
+http_access allow localhost
+# And finally deny all other access to this proxy
+acl blokkade dstdomain .kdg.be
+http_access deny blokkade
+http_access deny CONNECT blokkade
+http_access deny all
+
+# Adblocker Calomel
+acl ads dstdom_regex "/etc/squid/ad_block.txt"
+http_access deny ads
+
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://example.com -I
+HTTP/1.1 200 OK
+Content-Type: text/html
+ETag: "84238dfc8092e5d9c0dac8ef93371a07:1736799080.121134"
+Last-Modified: Mon, 13 Jan 2025 20:11:20 GMT
+Cache-Control: max-age=86000
+Date: Wed, 01 Oct 2025 12:31:46 GMT
+X-Cache: MISS from ubuntu
+X-Cache-Lookup: MISS from ubuntu:8080
+Via: 1.1 ubuntu (squid/5.9)
+Connection: keep-alive
+
+ubuntu@ubuntu:~$ curl -x http://localhost:8080 http://ads.doubleclick.net -I
+HTTP/1.1 502 Bad Gateway
+Server: squid/5.9
+Mime-Version: 1.0
+Date: Wed, 01 Oct 2025 12:31:59 GMT
+Content-Type: text/html;charset=utf-8
+Content-Length: 3502
+X-Squid-Error: ERR_READ_ERROR 0
+Vary: Accept-Language
+Content-Language: en
+X-Cache: MISS from ubuntu
+X-Cache-Lookup: MISS from ubuntu:8080
+Via: 1.1 ubuntu (squid/5.9)
+Connection: keep-alive
+
+ubuntu@ubuntu:~$ 
+
+6. ontent filtering:
+Laat e2guardian draaien op poort 8888 en doorverwijzen naar je proxy server.
+Herstart e2guardian (systemctl restart e2guardian; systemctl status e2guardian)
+Test nu uit door als proxypoort 8888 te geven. Het verkeer gaat nu eerst via e2guardian en dan langs
+de proxy.
+
+# only if the mechanisms can co-exist (e.g. basic/proxy auth can't)
+filterports = 8888
+proxyport = 8080
+
+ubuntu@ubuntu:~$ sudo systemctl restart e2guardian
+ubuntu@ubuntu:~$ sudo systemctl status e2guardian
+\u25cf e2guardian.service - E2guardian Web filtering
+     Loaded: loaded (/lib/systemd/system/e2guardian.service; enabled; vendor pr>
+     Active: active (running) since Wed 2025-10-01 12:36:58 UTC; 1s ago
+       Docs: https://e2guardian.org/
+    Process: 7719 ExecStart=/usr/sbin/e2guardian (code=exited, status=0/SUCCESS)
+      Tasks: 504
+     Memory: 30.7M
+        CPU: 128ms
+     CGroup: /system.slice/e2guardian.service
+             \u2514\u25007720 /usr/sbin/e2guardian
+
+Oct 01 12:36:57 ubuntu systemd[1]: Starting E2guardian Web filtering...
+Oct 01 12:36:58 ubuntu systemd[1]: Started E2guardian Web filtering.
+Oct 01 12:36:58 ubuntu e2guardian[7720]: Started successfully.
+lines 1-14/14 (END)
+
+ubuntu@ubuntu:~$ curl -x http://localhost:8888 http://example.com -I
+HTTP/1.1 200 OK
+Content-Type: text/html
+ETag: "84238dfc8092e5d9c0dac8ef93371a07:1736799080.121134"
+Last-Modified: Mon, 13 Jan 2025 20:11:20 GMT
+Cache-Control: max-age=86000
+Date: Wed, 01 Oct 2025 12:37:14 GMT
+Connection: keep-alive
+
+ubuntu@ubuntu:~$ curl -x http://localhost:8888 http://www.kdg.be -I
+HTTP/1.1 302 Found
+Date: Wed, 01 Oct 2025 12:37:19 GMT
+Server: Apache
+Location: https://www.kdg.be/
+Keep-Alive: timeout=5, max=100
+Connection: keep-alive
+Content-Type: text/html; charset=iso-8859-1
+
+ontent-Type: text/html; charset=iso-8859-1
+
+ubuntu@ubuntu:~$ sudo tail -f /var/log/e2guardian/access.log
+1759320553.587		-	127.0.0.1	127.0.0.1	http://example.com	GET	200	1256	-	-	-	522	-	0	--50	-	no_name_group	1
+1759322244.587		-	127.0.0.1	127.0.0.1	http://www.kdg.be	HEAD	302	0	-	-	-	5089	-	0	-0	-	no_name_group	1
+
+8. Stel e2guardian in, zodat deze ook realtime op virussen nakijkt met clamav-daemon.
+clamav staat al auto ingesteld in /etc/e2guardian/contentscanners maar moet je in
+/etc/e2guardian/e2guardian.conf activeren.
+Activeer clamdscan.conf
+
+ubuntu@ubuntu:~$ sudo systemctl enable clamav-daemon
+sudo systemctl start clamav-daemon
+sudo systemctl status clamav-daemon
+Synchronizing state of clamav-daemon.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable clamav-daemon
+Created symlink /etc/systemd/system/multi-user.target.wants/clamav-daemon.service \u2192 /lib/systemd/system/clamav-daemon.service.
+Created symlink /etc/systemd/system/sockets.target.wants/clamav-daemon.socket \u2192 /lib/systemd/system/clamav-daemon.socket.
+\u25cf clamav-daemon.service - Clam AntiVirus userspace daemon
+     Loaded: loaded (/lib/systemd/system/clamav-daemon.service; enabled; vendor>
+    Drop-In: /etc/systemd/system/clamav-daemon.service.d
+             \u2514\u2500extend.conf
+     Active: active (running) since Wed 2025-10-01 12:43:49 UTC; 14ms ago
+TriggeredBy: \u25cf clamav-daemon.socket
+       Docs: man:clamd(8)
+             man:clamd.conf(5)
+             https://docs.clamav.net/
+    Process: 8362 ExecStartPre=/bin/mkdir -p /run/clamav (code=exited, status=0>
+    Process: 8363 ExecStartPre=/bin/chown clamav /run/clamav (code=exited, stat>
+   Main PID: 8364 (clamd)
+      Tasks: 1 (limit: 4517)
+     Memory: 6.2M
+        CPU: 14ms
+     CGroup: /system.slice/clamav-daemon.service
+             \u2514\u25008364 /usr/sbin/clamd --foreground=true
+
+Oct 01 12:43:49 ubuntu systemd[1]: Starting Clam AntiVirus userspace daemon...
+Oct 01 12:43:49 ubuntu systemd[1]: Started Clam AntiVirus userspace daemon.
+lines 1-20/20 (END)
+
+Uit commentaar HALEN!!!
+contentscanner = '/etc/e2guardian/contentscanners/clamdscan.conf'
+#!! Not compiled !! contentscanner = '/etc/e2guardian/contentscanners/avastdscan.conf'
+#!! Not compiled !! contentscanner = '/etc/e2guardian/contentscanners/kavdscan.conf'
+#contentscanner = '/etc/e2guardian/contentscanners/icapscan.conf'
+#contentscanner = '/etc/e2guardian/contentscanners/commandlinescan.conf'
+
+ubuntu@ubuntu:~$ grep -n "contentscanner" /etc/e2guardian/e2guardian.conf | grep -v "#"
+506:contentscannertimeout = 60
+ubuntu@ubuntu:~$ sudo vi /etc/e2guardian/e2guardian.conf
+ubuntu@ubuntu:~$ grep -n "contentscanner" /etc/e2guardian/e2guardian.conf | grep -v "#"
+506:contentscannertimeout = 60
+ubuntu@ubuntu:~$ sudo vi /etc/e2guardian/e2guardian.conf
+ubuntu@ubuntu:~$ sudo systemctl restart e2guardian
+sudo systemctl status e2guardian
+\u25cf e2guardian.service - E2guardian Web filtering
+     Loaded: loaded (/lib/systemd/system/e2guardian.service; enabled; vendor pr>
+     Active: active (running) since Wed 2025-10-01 12:48:00 UTC; 16ms ago
+       Docs: https://e2guardian.org/
+    Process: 8399 ExecStart=/usr/sbin/e2guardian (code=exited, status=0/SUCCESS)
+      Tasks: 101
+     Memory: 17.5M
+        CPU: 71ms
+     CGroup: /system.slice/e2guardian.service
+             \u2514\u25008400 /usr/sbin/e2guardian
+
+Oct 01 12:48:00 ubuntu systemd[1]: Starting E2guardian Web filtering...
+Oct 01 12:48:00 ubuntu systemd[1]: Started E2guardian Web filtering.
+ubuntu@ubuntu:~$ grep -n "contentscanner" /etc/e2guardian/e2guardian.conf | grep -v "#"
+495:contentscanner = '/etc/e2guardian/contentscanners/clamdscan.conf'
+506:contentscannertimeout = 60
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ grep -n "" /etc/e2guardian/contentscanners/clamdscan.conf | head -n 20
+1:plugname = 'clamdscan'
+2:
+3:# edit this to match the location of your ClamD UNIX domain socket
+4:clamdudsfile = '/run/clamav/clamd.ctl'
+5:
+6:# If this string is set, the text it contains shall be removed from the
+7:# beginning of filenames when passing them to ClamD.
+8:# Use it to - for example - support a ClamD running inside a chroot jail:
+9:# if DG's filecachedir is set to "/var/clamdchroot/downloads/" and pathprefix
+10:# is set to "/var/clamdchroot", then file names given to ClamD will be of the
+11:# form "/downloads/tf*" instead of "/var/clamdchroot/downloads/tf*".
+12:#pathprefix = '/var/clamdchroot'
+13:
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ sudo tail -f /var/log/e2guardian/access.log
+1759320553.587		-	127.0.0.1	127.0.0.1	http://example.com	GET	200	1256	-	-	-	522	-	0	--50	-	no_name_group	1
+1759322244.587		-	127.0.0.1	127.0.0.1	http://www.kdg.be	HEAD	302	0	-	-	-	5089	-	0	-0	-	no_name_group	1
+1759322354.851		-	127.0.0.1	127.0.0.1	http://example.com	HEAD	200	0	-	-	-	120636	-	0	-0	-	no_name_group	1
+1759322975.366		-	127.0.0.1	127.0.0.1	http://www.eicar.org/download/eicar.com.txt	GET	403	252	-	-	-	101	-	1203	*SCANNED* *DENIED* /tmp/csUWos5K: Access denied. ERROR	0Content scanning	no_name_group	1
+
+SCAN WERDT INDERDAAD TEGENGEHODUEN!
+
+8.2) Pas de e2guardian user aan naar de clamav daemon user.
+Je kan via de proceslijst kijken met welke user clamav draait.
+In /etc/e2guardian/e2guardian.conf
+daemonuser = 'clamav'
+daemongroup = 'clamav'
+root@kdguntu# systemctl stop e2guardian
+root@kdguntu# rm /tmp/.e2guardian*
+root@kdguntu# systemctl start e2guardian
+Los eventuele Permission Denied problemen op door chgrp (geen chmod 777
+
+ubuntu@ubuntu:~$ ps -u clamav
+    PID TTY          TIME CMD
+   3762 ?        00:00:04 freshclam
+   8364 ?        00:00:14 clamd
+ubuntu@ubuntu:~$ 
+
+/daemonuser gedaan in : plek
+# Temp files created during virus scanning are given owner and group read
+
+# clamdscan, the two processes must run with either the same group or user ID.
+daemonuser = 'clamav' (aanpassen naar user)
+daemongroup = 'clamav' (same here)
+
+ubuntu@ubuntu:~$ sudo chgrp -R clamav /var/log/e2guardian
+ubuntu@ubuntu:~$ sudo chmod -R g+w /var/log/e2guardian
+ubuntu@ubuntu:~$ sudo systemctl start e2guardian
+sudo systemctl status e2guardian
+\u25cf e2guardian.service - E2guardian Web filtering
+     Loaded: loaded (/lib/systemd/system/e2guardian.service; enabled; vendor pr>
+     Active: active (running) since Wed 2025-10-01 13:01:10 UTC; 16ms ago
+       Docs: https://e2guardian.org/
+    Process: 9010 ExecStart=/usr/sbin/e2guardian (code=exited, status=0/SUCCESS)
+      Tasks: 157
+     Memory: 19.7M
+        CPU: 73ms
+     CGroup: /system.slice/e2guardian.service
+             \u2514\u25009011 /usr/sbin/e2guardian
+
+Oct 01 13:01:10 ubuntu systemd[1]: Starting E2guardian Web filtering...
+Oct 01 13:01:10 ubuntu systemd[1]: Started E2guardian Web filtering.
+lines 1-13/13 (END)
+
+om.txt -o /tmp/eicar.txt
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   252  100   252    0     0   2420      0 --:--:-- --:--:-- --:--:--  2446
+ubuntu@ubuntu:~$ sudo tail -f /var/log/e2guardian/access.log
+1759320553.587		-	127.0.0.1	127.0.0.1	http://example.com	GET	200	1256	-	-	-	522	-	0	--50	-	no_name_group	1
+1759322244.587		-	127.0.0.1	127.0.0.1	http://www.kdg.be	HEAD	302	0	-	-	-	5089	-	0	-0	-	no_name_group	1
+1759322354.851		-	127.0.0.1	127.0.0.1	http://example.com	HEAD	200	0	-	-	-	120636	-	0	-0	-	no_name_group	1
+1759322975.366		-	127.0.0.1	127.0.0.1	http://www.eicar.org/download/eicar.com.txt	GET	403	252	-	-	-	101	-	1203	*SCANNED* *DENIED* /tmp/csUWos5K: Access denied. ERROR	0Content scanning	no_name_group	1
+1759323698.750		-	127.0.0.1	127.0.0.1	http://www.eicar.org/download/eicar.com.txt	GET	301	252	-	-	-	103	-	0	*SCANNED* -	0	-	no_name_group	1
