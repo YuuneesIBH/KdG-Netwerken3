@@ -1,0 +1,1787 @@
+1. Start als root tcpdump (sudo apt-get install tcpdump) op je loopback interface
+Installeer een openssh server op Linux (apt-get install openssh-server)
+a) Test de verbinding uit naar je ssh server op 127.0.0.1 (IPv4)
+b) Maak een verbinding naar je ssh server op ::1 (zoek op met man ssh).
+c) Verifieer met tcpdump of wireshark dat de communicatie over IPv6 loopt.
+
+ubuntu@ubuntu:~$ sudo apt update
+[sudo] password for ubuntu: 
+Hit:1 http://ports.ubuntu.com/ubuntu-ports jammy InRelease
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [128 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [127 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [129 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 Packages [2798 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main Translation-en [465 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 DEP-11 Metadata [112 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 Packages [4399 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted Translation-en [863 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy-updates/restricted arm64 DEP-11 Metadata [212 B]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 Packages [1246 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe Translation-en [307 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 DEP-11 Metadata [356 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports jammy-updates/multiverse arm64 DEP-11 Metadata [212 B]
+Get:15 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 Packages [69.0 kB]
+Get:16 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main Translation-en [11.5 kB]
+Get:17 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main arm64 DEP-11 Metadata [3576 B]
+Get:18 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main DEP-11 48x48 Icons [9530 B]
+Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-backports/main DEP-11 64x64 Icons [11.2 kB]
+Get:20 http://ports.ubuntu.com/ubuntu-ports jammy-backports/restricted arm64 DEP-11 Metadata [212 B]
+Get:21 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 Packages [28.5 kB]
+Get:22 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe Translation-en [16.6 kB]
+Get:23 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe arm64 DEP-11 Metadata [9320 B]
+Get:24 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe DEP-11 48x48 Icons [19.7 kB]
+Get:25 http://ports.ubuntu.com/ubuntu-ports jammy-backports/universe DEP-11 64x64 Icons [28.2 kB]
+Get:26 http://ports.ubuntu.com/ubuntu-ports jammy-backports/multiverse arm64 DEP-11 Metadata [212 B]
+Get:27 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 Packages [2548 kB]
+Get:28 http://ports.ubuntu.com/ubuntu-ports jammy-security/main Translation-en [399 kB]
+Get:29 http://ports.ubuntu.com/ubuntu-ports jammy-security/main arm64 DEP-11 Metadata [54.5 kB]
+Get:30 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 Packages [4247 kB]
+Get:31 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted Translation-en [837 kB]
+Get:32 http://ports.ubuntu.com/ubuntu-ports jammy-security/restricted arm64 DEP-11 Metadata [208 B]
+Get:33 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 Packages [1019 kB]
+Get:34 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe Translation-en [219 kB]
+Get:35 http://ports.ubuntu.com/ubuntu-ports jammy-security/universe arm64 DEP-11 Metadata [125 kB]
+Get:36 http://ports.ubuntu.com/ubuntu-ports jammy-security/multiverse arm64 DEP-11 Metadata [208 B]
+Fetched 20.6 MB in 4s (5407 kB/s)                                   
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+479 packages can be upgraded. Run 'apt list --upgradable' to see them.
+ubuntu@ubuntu:~$ sudo apt install tcpdump openssh-server -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  openssh-client openssh-sftp-server
+Suggested packages:
+  keychain libpam-ssh monkeysphere ssh-askpass molly-guard ufw
+The following NEW packages will be installed:
+  tcpdump
+The following packages will be upgraded:
+  openssh-client openssh-server openssh-sftp-server
+3 upgraded, 1 newly installed, 0 to remove and 476 not upgraded.
+Need to get 1808 kB of archives.
+After this operation, 1418 kB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 openssh-sftp-server arm64 1:8.9p1-3ubuntu0.13 [36.8 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 openssh-server arm64 1:8.9p1-3ubuntu0.13 [414 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 openssh-client arm64 1:8.9p1-3ubuntu0.13 [861 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 tcpdump arm64 4.99.1-3ubuntu0.2 [497 kB]
+Fetched 1808 kB in 0s (8519 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+(Reading database ... 176851 files and directories currently installed.)
+Preparing to unpack .../openssh-sftp-server_1%3a8.9p1-3ubuntu0.13_arm64.deb ...
+Unpacking openssh-sftp-server (1:8.9p1-3ubuntu0.13) over (1:8.9p1-3ubuntu0.3) ..
+.
+Preparing to unpack .../openssh-server_1%3a8.9p1-3ubuntu0.13_arm64.deb ...
+Unpacking openssh-server (1:8.9p1-3ubuntu0.13) over (1:8.9p1-3ubuntu0.3) ...
+Preparing to unpack .../openssh-client_1%3a8.9p1-3ubuntu0.13_arm64.deb ...
+Unpacking openssh-client (1:8.9p1-3ubuntu0.13) over (1:8.9p1-3ubuntu0.3) ...
+Selecting previously unselected package tcpdump.
+Preparing to unpack .../tcpdump_4.99.1-3ubuntu0.2_arm64.deb ...
+Unpacking tcpdump (4.99.1-3ubuntu0.2) ...
+Setting up tcpdump (4.99.1-3ubuntu0.2) ...
+Setting up openssh-client (1:8.9p1-3ubuntu0.13) ...
+Setting up openssh-sftp-server (1:8.9p1-3ubuntu0.13) ...
+Setting up openssh-server (1:8.9p1-3ubuntu0.13) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based fronte
+nd cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+rescue-ssh.target is a disabled or a static unit not running, not starting it.
+ssh.socket is a disabled or a static unit not running, not starting it.
+Processing triggers for man-db (2.10.2-1) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Scanning processes...                                                           
+Scanning linux images...                                                        
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+ubuntu@ubuntu:~$ sudo systemctl status ssh
+\u25cf ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: e>
+     Active: active (running) since Wed 2025-10-08 12:18:54 UTC; 11s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 3796 (sshd)
+      Tasks: 1 (limit: 4517)
+     Memory: 1.6M
+        CPU: 17ms
+     CGroup: /system.slice/ssh.service
+             \u2514\u25003796 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+Oct 08 12:18:54 ubuntu systemd[1]: Starting OpenBSD Secure Shell server...
+Oct 08 12:18:54 ubuntu sshd[3796]: Server listening on 0.0.0.0 port 22.
+Oct 08 12:18:54 ubuntu sshd[3796]: Server listening on :: port 22.
+Oct 08 12:18:54 ubuntu systemd[1]: Started OpenBSD Secure Shell server.
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ sudo tcpdump -i lo
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+12:19:39.967862 IP6 ip6-localhost.59831 > ip6-localhost.50567: UDP, length 0
+12:19:59.991533 IP6 ip6-localhost.59831 > ip6-localhost.50567: UDP, length 0
+12:20:06.214304 IP localhost.mdns > mdns.mcast.net.mdns: 0 [2q] PTR (QM)? _ipp._tcp.local. PTR (QM)? _ipps._tcp.local. (45)
+12:20:06.282449 IP localhost.60114 > localhost.domain: 55873+ [1au] PTR? 251.0.0.224.in-addr.arpa. (53)
+12:20:06.296399 IP localhost.domain > localhost.60114: 55873 1/0/1 PTR mdns.mcast.net. (81)
+12:20:06.385826 IP localhost.45243 > localhost.domain: 53965+ [1au] PTR? 53.0.0.127.in-addr.arpa. (52)
+12:20:06.386074 IP localhost.domain > localhost.45243: 53965*$ 1/0/1 PTR localhost. (75)
+12:20:10.002285 IP6 ip6-localhost.59831 > ip6-localhost.50567: UDP, length 0
+12:20:30.028156 IP6 ip6-localhost.59831 > ip6-localhost.50567: UDP, length 0
+12:20:30.045381 IP localhost.mdns > mdns.mcast.net.mdns: 0 PTR (QM)? _pgpkey-hkp._tcp.local. (40)
+
+2. Pas je apache configuratie aan zodat deze ENKEL werkt met ipv6. Werkt dit?
+Hoe geraak je in je browser aan een ipv6 website?
+
+ubuntu@ubuntu:~$ sudo apt install apache2 -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  apache2-bin apache2-data apache2-utils libapr1 libaprutil1
+  libaprutil1-dbd-sqlite3 libaprutil1-ldap
+Suggested packages:
+  apache2-doc apache2-suexec-pristine | apache2-suexec-custom ufw
+The following NEW packages will be installed:
+  apache2 apache2-bin apache2-data apache2-utils libapr1 libaprutil1
+  libaprutil1-dbd-sqlite3 libaprutil1-ldap
+0 upgraded, 8 newly installed, 0 to remove and 476 not upgraded.
+Need to get 1876 kB of archives.
+After this operation, 7035 kB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libapr1 arm64 1.7.0-8ubuntu0.22.04.2 [106 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libaprutil1 arm64 1.6.1-5ubuntu4.22.04.2 [93.6 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libaprutil1-dbd-sqlite3 arm64 1.6.1-5ubuntu4.22.04.2 [11.2 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libaprutil1-ldap arm64 1.6.1-5ubuntu4.22.04.2 [9048 B]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 apache2-bin arm64 2.4.52-1ubuntu4.16 [1305 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 apache2-data all 2.4.52-1ubuntu4.16 [165 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 apache2-utils arm64 2.4.52-1ubuntu4.16 [87.9 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 apache2 arm64 2.4.52-1ubuntu4.16 [97.9 kB]
+Fetched 1876 kB in 1s (2896 kB/s)      
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package libapr1:arm64.
+(Reading database ... 176865 files and directories currently installed.)
+Preparing to unpack .../0-libapr1_1.7.0-8ubuntu0.22.04.2_arm64.deb ...
+Unpacking libapr1:arm64 (1.7.0-8ubuntu0.22.04.2) ...
+Selecting previously unselected package libaprutil1:arm64.
+Preparing to unpack .../1-libaprutil1_1.6.1-5ubuntu4.22.04.2_arm64.deb ...
+Unpacking libaprutil1:arm64 (1.6.1-5ubuntu4.22.04.2) ...
+Selecting previously unselected package libaprutil1-dbd-sqlite3:arm64.
+Preparing to unpack .../2-libaprutil1-dbd-sqlite3_1.6.1-5ubuntu4.22.04.2_arm64.d
+eb ...
+Unpacking libaprutil1-dbd-sqlite3:arm64 (1.6.1-5ubuntu4.22.04.2) ...
+Selecting previously unselected package libaprutil1-ldap:arm64.
+Preparing to unpack .../3-libaprutil1-ldap_1.6.1-5ubuntu4.22.04.2_arm64.deb ...
+Unpacking libaprutil1-ldap:arm64 (1.6.1-5ubuntu4.22.04.2) ...
+Selecting previously unselected package apache2-bin.
+Preparing to unpack .../4-apache2-bin_2.4.52-1ubuntu4.16_arm64.deb ...
+Unpacking apache2-bin (2.4.52-1ubuntu4.16) ...
+Selecting previously unselected package apache2-data.
+Preparing to unpack .../5-apache2-data_2.4.52-1ubuntu4.16_all.deb ...
+Unpacking apache2-data (2.4.52-1ubuntu4.16) ...
+Selecting previously unselected package apache2-utils.
+Preparing to unpack .../6-apache2-utils_2.4.52-1ubuntu4.16_arm64.deb ...
+Unpacking apache2-utils (2.4.52-1ubuntu4.16) ...
+Selecting previously unselected package apache2.
+Preparing to unpack .../7-apache2_2.4.52-1ubuntu4.16_arm64.deb ...
+Unpacking apache2 (2.4.52-1ubuntu4.16) ...
+Setting up libapr1:arm64 (1.7.0-8ubuntu0.22.04.2) ...
+Setting up apache2-data (2.4.52-1ubuntu4.16) ...
+Setting up libaprutil1:arm64 (1.6.1-5ubuntu4.22.04.2) ...
+Setting up libaprutil1-ldap:arm64 (1.6.1-5ubuntu4.22.04.2) ...
+Setting up libaprutil1-dbd-sqlite3:arm64 (1.6.1-5ubuntu4.22.04.2) ...
+Setting up apache2-utils (2.4.52-1ubuntu4.16) ...
+Setting up apache2-bin (2.4.52-1ubuntu4.16) ...
+Setting up apache2 (2.4.52-1ubuntu4.16) ...
+Enabling module mpm_event.
+Enabling module authz_core.
+Enabling module authz_host.
+Enabling module authn_core.
+Enabling module auth_basic.
+Enabling module access_compat.
+Enabling module authn_file.
+Enabling module authz_user.
+Enabling module alias.
+Enabling module dir.
+Enabling module autoindex.
+Enabling module env.
+Enabling module mime.
+Enabling module negotiation.
+Enabling module setenvif.
+Enabling module filter.
+Enabling module deflate.
+Enabling module status.
+Enabling module reqtimeout.
+Enabling conf charset.
+Enabling conf localized-error-pages.
+Enabling conf other-vhosts-access-log.
+Enabling conf security.
+Enabling conf serve-cgi-bin.
+Enabling site 000-default.
+Created symlink /etc/systemd/system/multi-user.target.wants/apache2.service \u2192 /l
+ib/systemd/system/apache2.service.
+Could not execute systemctl:  at /usr/bin/deb-systemd-invoke line 142.
+Created symlink /etc/systemd/system/multi-user.target.wants/apache-htcacheclean.
+service \u2192 /lib/systemd/system/apache-htcacheclean.service.
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.4) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Scanning processes...                                                           
+Scanning linux images...                                                        
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ sudo vi /etc/apache2/ports.conf
+ubuntu@ubuntu:~$ 
+
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen [::]:80
+
+<IfModule ssl_module>
+        Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 443
+</IfModule>
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+
+ubuntu@ubuntu:~$ sudo vi /etc/apache2/sites-enabled/000-default.conf
+ubuntu@ubuntu:~$ 
+
+<VirtualHost [::]:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        #ServerName www.example.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+                                                              1,17          Top
+
+
+# Include generic snippets of statements
+IncludeOptional conf-enabled/*.conf
+
+# Include the virtual host configurations:
+IncludeOptional sites-enabled/*.conf
+
+ServerName localhost
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+
+Ik heb hier localhost servername aan toegevoegd.
+
+##Apache bug fixing:
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      511          0.0.0.0:80        0.0.0.0:*    users:(("nginx",pid=852,fd=6),("nginx",pid=851,fd=6),("nginx",pid=850,fd=6),("nginx",pid=849,fd=6),("nginx",pid=848,fd=6),("nginx",pid=847,fd=6),("nginx",pid=846,fd=6),("nginx",pid=845,fd=6),("nginx",pid=844,fd=6))
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))                                                                                                                                                                                      
+LISTEN 0      511             [::]:80           [::]:*    users:(("nginx",pid=852,fd=7),("nginx",pid=851,fd=7),("nginx",pid=850,fd=7),("nginx",pid=849,fd=7),("nginx",pid=848,fd=7),("nginx",pid=847,fd=7),("nginx",pid=846,fd=7),("nginx",pid=845,fd=7),("nginx",pid=844,fd=7))
+ubuntu@ubuntu:~$ sudo systemctl stop nginx
+sudo systemctl disable nginx
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install disable nginx
+Removed /etc/systemd/system/multi-user.target.wants/nginx.service.
+ubuntu@ubuntu:~$ sudo systemctl restart apache2
+ubuntu@ubuntu:~$ sudo systemctl status apache2
+\u25cf apache2.service - The Apache HTTP Server
+     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor prese>
+     Active: active (running) since Wed 2025-10-08 12:30:39 UTC; 2s ago
+       Docs: https://httpd.apache.org/docs/2.4/
+    Process: 21046 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/S>
+   Main PID: 21051 (apache2)
+      Tasks: 55 (limit: 4517)
+     Memory: 5.0M
+        CPU: 36ms
+     CGroup: /system.slice/apache2.service
+             \u251c\u250021051 /usr/sbin/apache2 -k start
+             \u251c\u250021052 /usr/sbin/apache2 -k start
+             \u2514\u250021053 /usr/sbin/apache2 -k start
+
+Oct 08 12:30:39 ubuntu systemd[1]: Starting The Apache HTTP Server...
+Oct 08 12:30:39 ubuntu apachectl[21050]: AH00558: apache2: Could not reliably d>
+Oct 08 12:30:39 ubuntu systemd[1]: Started The Apache HTTP Server.
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ sudo vi /etc/apache2/envvars
+ubuntu@ubuntu:~$ 
+
+## following line (default is 8192):
+#APACHE_ULIMIT_MAX_FILES='ulimit -n 65536'
+
+## If you would like to pass arguments to the web server, add them below
+## to the APACHE_ARGUMENTS environment.
+#export APACHE_ARGUMENTS=''
+
+## Enable the debug mode for maintainer scripts.
+## This will produce a verbose output on package installations of web server modules and web application
+## installations which interact with Apache
+export APACHE_LISTEN_IPV6=On
+export APACHE_LISTEN_IPV4=Off
+
+#export APACHE2_MAINTSCRIPT_DEBUG=1
+
+ubuntu@ubuntu:~$ sudo vi /etc/sysctl.conf
+ubuntu@ubuntu:~$ sudo systemctl restart apache2
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      511                *:80              *:*    users:(("apache2",pid=34878,fd=3),("apache2",pid=34877,fd=3),("apache2",pid=34876,fd=3))
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))                                                        
+ubuntu@ubuntu:~$ 
+
+# Magic system request Key
+# 0=disable, 1=enable all, >1 bitmask of sysrq functions
+# See https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
+# for what other values do
+#kernel.sysrq=438
+net.ipv6.bindv6only = 1
+
+
+CLAUDE FIX
+
+ubuntu@ubuntu:~$ sudo sysctl -p
+net.ipv6.bindv6only = 1
+ubuntu@ubuntu:~$ sudo sysctl -w net.ipv6.bindv6only=1
+net.ipv6.bindv6only = 1
+ubuntu@ubuntu:~$ sudo systemctl restart apache2
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      511                *:80              *:*    users:(("apache2",pid=47779,fd=3),("apache2",pid=47778,fd=3),("apache2",pid=47777,fd=3))
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))                                                        
+ubuntu@ubuntu:~$ sudo systemctl stop apache2
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))           
+ubuntu@ubuntu:~$ sudo systemctl start apache2
+ubuntu@ubuntu:~$ sudo systemctl status apache2
+\u25cf apache2.service - The Apache HTTP Server
+     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor prese>
+     Active: active (running) since Wed 2025-10-08 12:38:40 UTC; 4s ago
+       Docs: https://httpd.apache.org/docs/2.4/
+    Process: 50290 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/S>
+   Main PID: 50296 (apache2)
+      Tasks: 55 (limit: 4517)
+     Memory: 5.0M
+        CPU: 36ms
+     CGroup: /system.slice/apache2.service
+             \u251c\u250050296 /usr/sbin/apache2 -k start
+             \u251c\u250050297 /usr/sbin/apache2 -k start
+             \u2514\u250050298 /usr/sbin/apache2 -k start
+
+Oct 08 12:38:40 ubuntu systemd[1]: Starting The Apache HTTP Server...
+Oct 08 12:38:40 ubuntu apachectl[50293]: AH00558: apache2: Could not reliably d>
+Oct 08 12:38:40 ubuntu systemd[1]: Started The Apache HTTP Server.
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      511                *:80              *:*    users:(("apache2",pid=50298,fd=3),("apache2",pid=50297,fd=3),("apache2",pid=50296,fd=3))
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))                                                        
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ sudo apache2ctl -S | grep 80
+*:80                   127.0.1.1 (/etc/apache2/sites-enabled/000-default.conf:1)
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+ubuntu@ubuntu:~$ # Bekijk de volledige VirtualHost configuratie
+sudo vi /etc/apache2/sites-enabled/000-default.conf
+ubuntu@ubuntu:~$ grep -r "VirtualHost" /etc/apache2/sites-enabled/
+ubuntu@ubuntu:~$ ls -la /etc/apache2/sites-enabled/
+total 8
+drwxr-xr-x 2 root root 4096 Oct  8 12:24 .
+drwxr-xr-x 8 root root 4096 Oct  8 12:33 ..
+lrwxrwxrwx 1 root root   35 Oct  8 12:21 000-default.conf -> ../sites-available/000-default.conf
+ubuntu@ubuntu:~$ cat /etc/apache2/sites-available/000-default.conf
+<VirtualHost [::]:80>
+	# The ServerName directive sets the request scheme, hostname and port that
+	# the server uses to identify itself. This is used when creating
+	# redirection URLs. In the context of virtual hosts, the ServerName
+	# specifies what hostname must appear in the request's Host: header to
+	# match this virtual host. For the default virtual host (this file) this
+	# value is not decisive as it is used as a last resort host regardless.
+	# However, you must set it for any further virtual host explicitly.
+	#ServerName www.example.com
+
+	ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html
+
+	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+	# error, crit, alert, emerg.
+	# It is also possible to configure the loglevel for particular
+	# modules, e.g.
+	#LogLevel info ssl:warn
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	# For most configuration files from conf-available/, which are
+	# enabled or disabled at a global level, it is possible to
+	# include a line for only one particular virtual host. For example the
+	# following line enables the CGI configuration for this host only
+	# after it has been globally disabled with "a2disconf".
+	#Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+ubuntu@ubuntu:~$ cat /etc/apache2/ports.conf
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen [::]:80
+
+<IfModule ssl_module>
+	Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+	Listen 443
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+ubuntu@ubuntu:~$ grep -r "^Listen" /etc/apache2/
+/etc/apache2/ports.conf:Listen [::]:80
+ubuntu@ubuntu:~$ apache2ctl -M | grep mpm
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+ mpm_event_module (shared)
+ubuntu@ubuntu:~$ cat /etc/apache2/envvars | grep -i ipv
+export APACHE_LISTEN_IPV6=On
+export APACHE_LISTEN_IPV4=Off
+ubuntu@ubuntu:~$ sudo vi /etc/apache2/envvars
+ubuntu@ubuntu:~$ sudo systemctl stop apache2
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))           
+ubuntu@ubuntu:~$ sysctl net.ipv6.bindv6only
+net.ipv6.bindv6only = 1
+ubuntu@ubuntu:~$ sudo systemctl start apache2
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      511                *:80              *:*    users:(("apache2",pid=76937,fd=3),("apache2",pid=76936,fd=3),("apache2",pid=76935,fd=3))
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))                                                        
+ubuntu@ubuntu:~$ sudo vi /etc/apache2/ports.conf
+ubuntu@ubuntu:~$ sudo systemctl restart apache2
+Job for apache2.service failed because the control process exited with error code.
+See "systemctl status apache2.service" and "journalctl -xeu apache2.service" for details.
+ubuntu@ubuntu:~$ sudo vi /etc/apache2/ports.conf
+ubuntu@ubuntu:~$ sudo systemctl restart apache2
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep :80
+LISTEN 0      511            [::1]:80           [::]:*    users:(("apache2",pid=82573,fd=3),("apache2",pid=82572,fd=3),("apache2",pid=82571,fd=3))
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=1415,fd=12))                                                        
+ubuntu@ubuntu:~$ cat /etc/apache2/ports.conf
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen [::1]:80
+
+<IfModule ssl_module>
+	Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+	Listen 443
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+ubuntu@ubuntu:~$ 
+
+3. Firewall regels
+a) Bekijk je IPv6 adres in Linux met het commando ip
+Zorg dat je enkel de v6 adressen krijgt
+b) Geef linux met het commando ip, het adres 2001::1
+Geef je host op de juiste interface het adres 2001::2
+c) Ping vanuit linux naar je host IPv6 2001::2.
+d) Bekijk de default IPv6 firewall regels in Ubuntu.
+e) Voeg een regel toe met ip6tables om deze ping (en énkel deze ping) te verbieden
+
+ubuntu@ubuntu:~$ ip -6 addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 state UNKNOWN qlen 1000
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP qlen 1000
+    inet6 fdcb:aca9:d40a:5300:1863:23ff:fe39:a42c/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 2591956sec preferred_lft 604756sec
+    inet6 fe80::1863:23ff:fe39:a42c/64 scope link 
+       valid_lft forever preferred_lft forever
+ubuntu@ubuntu:~$ sudo ip -6 addr add 2001::1/64 dev enp0s1
+ubuntu@ubuntu:~$ \ue0b2 \uf179 \ue0b1 \uf015 ~ \ue0b0\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\ue0b2 03:13:39 p. m. \uf017 \ue0b0
+\u276f ping6 2001:6a8:540:101::1
+
+ping6: UDP connect: No route to host
+
+\ue0b2 \uf179 \ue0b1 \uf015 ~ \ue0b0\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\ue0b2 03:13:42 p. m. \uf017 \ue0b0
+\u276f
+bash: \ue0b2: command not found
+bash: \u276f: command not found
+bash: ping6:: command not found
+bash: \ue0b2: command not found
+bash: \u276f: command not found
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+ping6: connect: Network is unreachable
+ubuntu@ubuntu:~$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 1a:63:23:39:a4:2c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.64.11/24 metric 100 brd 192.168.64.255 scope global dynamic enp0s1
+       valid_lft 2735sec preferred_lft 2735sec
+    inet6 2001::1/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdcb:aca9:d40a:5300:1863:23ff:fe39:a42c/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 2591932sec preferred_lft 604732sec
+    inet6 fe80::1863:23ff:fe39:a42c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: enp0s2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 42:65:49:49:e3:ab brd ff:ff:ff:ff:ff:ff
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ sudo ip link set enp0s2 up
+[sudo] password for ubuntu: 
+ubuntu@ubuntu:~$ sudo ip -6 addr add 2001:6a8:540:101::2/64 dev enp0s2
+ubuntu@ubuntu:~$ ip -6 addr show dev enp0s2
+3: enp0s2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    inet6 2001:6a8:540:101::2/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdd7:4277:cab5:1226:4065:49ff:fe49:e3ab/64 scope global dynamic mngtmpaddr 
+       valid_lft 2591992sec preferred_lft 604792sec
+    inet6 fe80::4065:49ff:fe49:e3ab/64 scope link 
+       valid_lft forever preferred_lft forever
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+PING 2001:6a8:540:101::1(2001:6a8:540:101::1) 56 data bytes
+64 bytes from 2001:6a8:540:101::1: icmp_seq=1 ttl=64 time=5.36 ms
+64 bytes from 2001:6a8:540:101::1: icmp_seq=2 ttl=64 time=0.802 ms
+64 bytes from 2001:6a8:540:101::1: icmp_seq=3 ttl=64 time=0.736 ms
+^C
+--- 2001:6a8:540:101::1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2037ms
+rtt min/avg/max/mdev = 0.736/2.297/5.355/2.162 ms
+ubuntu@ubuntu:~$ 
+
+VYOS config 
+
+❯ ssh vyos@
+
+The authenticity of host '' can't be established.
+ED25519 key fingerprint is SHA256:y85Nlw7Lcy7mnUr6VdLEVF3pQYRUITklgTPW/0lknGA.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.64.21' (ED25519) to the list of known hosts.
+vyos@'s password:
+Welcome to VyOS!
+
+Check out project news at https://blog.vyos.io
+and feel free to report bugs at https://phabricator.vyos.net
+
+You can change this banner using "set system login banner post-login" command.
+
+VyOS is a free software distribution that includes multiple components,
+you can check individual component licenses under /usr/share/doc/*/copyright
+vyos@vyos:~$
+
+configure
+set interfaces ethernet eth1 address 2001:6A8:540:101::1/64
+set interfaces ethernet eth1 ipv6 router-advert prefix 2001:6A8:540:101::/64
+set interfaces ethernet eth1 ipv6 router-advert prefix 2001:6A8:540:101::/64 valid-lifetime 2592000
+set interfaces ethernet eth1 ipv6 router-advert prefix 2001:6A8:540:101::/64 preferred-lifetime 2073600
+set interfaces ethernet eth1 ipv6 router-advert managed-flag false
+set interfaces ethernet eth1 ipv6 router-advert other-config-flag false
+set interfaces ethernet eth1 ipv6 router-advert send-advert true
+commit
+save
+
+pingtest naar VyOS VM
+ubuntu@ubuntu:~$ ip -6 addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 state UNKNOWN qlen 1000
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP qlen 1000
+    inet6 2001::1/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdcb:aca9:d40a:5300:1863:23ff:fe39:a42c/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 2591909sec preferred_lft 604709sec
+    inet6 fe80::1863:23ff:fe39:a42c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: enp0s2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP qlen 1000
+    inet6 2001:6a8:540:101::2/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdd7:4277:cab5:1226:4065:49ff:fe49:e3ab/64 scope global dynamic mngtmpaddr 
+       valid_lft 2591995sec preferred_lft 604795sec
+    inet6 fe80::4065:49ff:fe49:e3ab/64 scope link 
+       valid_lft forever preferred_lft forever
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+PING 2001:6a8:540:101::1(2001:6a8:540:101::1) 56 data bytes
+64 bytes from 2001:6a8:540:101::1: icmp_seq=1 ttl=64 time=1.22 ms
+64 bytes from 2001:6a8:540:101::1: icmp_seq=2 ttl=64 time=1.03 ms
+^C
+--- 2001:6a8:540:101::1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 1.031/1.127/1.223/0.096 ms
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ sudo ip6tables -L -v
+[sudo] password for ubuntu: 
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+PING 2001:6a8:540:101::1(2001:6a8:540:101::1) 56 data bytes
+^C
+--- 2001:6a8:540:101::1 ping statistics ---
+5 packets transmitted, 0 received, 100% packet loss, time 4105ms
+
+ubuntu@ubuntu:~$ sudo ip6tables -L -v
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    5   520 DROP       ipv6-icmp    any    any     anywhere             2001:6a8:540:101::1  ipv6-icmp echo-request
+ubuntu@ubuntu:~$ 
+
+4. Vyos
+Stel Vyos in zodat deze via Router Advertisements IPv6 adressen uitdeelt.
+Opgelet NIET als DHCPv6 server! Laat deze adressen uitdelen in het IPv6 subnet van
+student.kdg.be (2001:06A8:0540:0101::/64)
+Geef de Host-Only netwerkkaart ook een adres in die range.
+Zorg dat je alle parameters instelt bij de router-advert.
+Stel de valid-lifetime in op 2592000 en de preferred-lifetime op 2073600
+
+[edit]
+vyos@vyos# set interfaces ethernet eth1 ipv6 router-advertisement send-advert true
+
+
+  Configuration path: interfaces ethernet eth1 ipv6 [router-advertisement] is not valid
+  Set failed
+
+[edit]
+vyos@vyos#
+[edit]
+vyos@vyos# run show version
+
+Version:          VyOS 1.3.2
+Release train:    equuleus
+
+Built by:         derago@gmail.com
+Built on:         Mon 19 Sep 2022 08:13 UTC
+Build UUID:       de150757-9a82-4634-a288-a3ae2f261827
+Build commit ID:  3fda91501f31b8
+
+Architecture:     x86_64
+Boot via:         livecd
+System type:      QEMU guest
+
+Hardware vendor:  QEMU
+Hardware model:   Standard PC (Q35 + ICH9, 2009)
+Hardware S/N:
+Hardware UUID:    ba644747-29ed-4c48-9c6a-2c3dabc8a232
+
+Copyright:        VyOS maintainers and contributors
+[edit]
+vyos@vyos#
+[edit]
+vyos@vyos# set service router-advert interface eth1 prefix 2001:6A8:540:101::/64
+
+[edit]
+vyos@vyos#
+[edit]
+vyos@vyos# set service router-advert interface eth1 prefix 2001:6A8:540:101::/64 valid-lifetime 2592000
+
+[edit]
+vyos@vyos#
+[edit]
+vyos@vyos# set service router-advert interface eth1 prefix 2001:6A8:540:101::/64 preferred-lifetime 2073600
+[edit]
+vyos@vyos# set service router-advert interface eth1 managed-flag false
+
+  Configuration path: service router-advert interface eth1 managed-flag [false] is not valid
+  Set failed
+
+[edit]
+vyos@vyos# set service router-advert interface eth1 other-config-flag false
+
+  Configuration path: service router-advert interface eth1 other-config-flag [false] is not valid
+  Set failed
+
+[edit]
+vyos@vyos# commit
+[edit]
+vyos@vyos# save
+
+ubuntu@ubuntu:~$ sudo systemctl restart NetworkManager
+ubuntu@ubuntu:~$ ip -6 addr show enp0s2
+3: enp0s2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    inet6 2001:6a8:540:101:4065:49ff:fe49:e3ab/64 scope global dynamic mngtmpaddr 
+       valid_lft 2591857sec preferred_lft 2073457sec
+    inet6 2001:6a8:540:101::2/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdd7:4277:cab5:1226:4065:49ff:fe49:e3ab/64 scope global dynamic mngtmpaddr 
+       valid_lft 2591969sec preferred_lft 604769sec
+    inet6 fe80::4065:49ff:fe49:e3ab/64 scope link 
+       valid_lft forever preferred_lft forever
+ubuntu@ubuntu:~$ 
+
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+PING 2001:6a8:540:101::1(2001:6a8:540:101::1) 56 data bytes
+^C
+--- 2001:6a8:540:101::1 ping statistics ---
+9 packets transmitted, 0 received, 100% packet loss, time 8176ms
+
+ubuntu@ubuntu:~$ ip -6 router
+Object "router" is unknown, try "ip help".
+ubuntu@ubuntu:~$ ip -6 route
+::1 dev lo proto kernel metric 256 pref medium
+2001::/64 dev enp0s1 proto kernel metric 256 pref medium
+2001:6a8:540:101::/64 dev enp0s2 proto kernel metric 256 pref medium
+fdcb:aca9:d40a:5300::/64 dev enp0s1 proto ra metric 100 expires 2591974sec pref medium
+fdd7:4277:cab5:1226::/64 dev enp0s2 proto kernel metric 256 expires 2591940sec pref medium
+fe80::/64 dev enp0s1 proto kernel metric 256 pref medium
+fe80::/64 dev enp0s2 proto kernel metric 256 pref medium
+default via fe80::1491:c4ff:fe80:a0e0 dev enp0s2 proto ra metric 1024 expires 1574sec hoplimit 64 pref medium
+ubuntu@ubuntu:~$ 
+
+link local missing dus fiksen 
+vyos@vyos# show interfaces ethernet eth1
+
+ address 2001:6A8:540:101::1/64
+[edit]
+vyos@vyos#
+[edit]
+vyos@vyos#
+
+[edit]
+vyos@vyos# delete interfaces ethernet eth1 firewall in name
+[edit]
+vyos@vyos# set firewall ipv6-name ALLOW-ICMP default-action drop
+[edit]
+vyos@vyos# set firewall ipv6-name ALLOW-ICMP rule 10 action accept
+
+  Configuration path: [firewall ipv6-name ALLOW-ICMP rule 10 action accept] already exists
+
+[edit]
+vyos@vyos# set firewall ipv6-name ALLOW-ICMP rule 10 protocol ipv6-icmp
+
+  Configuration path: [firewall ipv6-name ALLOW-ICMP rule 10 protocol ipv6-icmp] already exists
+
+[edit]
+vyos@vyos# set interfaces ethernet eth1 firewall in ipv6-name ALLOW-ICMP
+[edit]
+vyos@vyos# set interfaces ethernet eth1 firewall in ipv6-name ALLOW-ICMP
+
+  Configuration path: [interfaces ethernet eth1 firewall in ipv6-name ALLOW-ICMP] already exists
+
+[edit]
+vyos@vyos# commit
+[edit]
+vyos@vyos# save
+
+[edit]
+vyos@vyos#
+[edit]
+vyos@vyos# ping6 2001:6a8:540:101::2
+PING 2001:6a8:540:101::2(2001:6a8:540:101::2) 56 data bytes
+64 bytes from 2001:6a8:540:101::2: icmp_seq=1 ttl=64 time=1.21 ms
+64 bytes from 2001:6a8:540:101::2: icmp_seq=2 ttl=64 time=0.967 ms
+64 bytes from 2001:6a8:540:101::2: icmp_seq=3 ttl=64 time=0.910 ms
+^C
+--- 2001:6a8:540:101::2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 6ms
+rtt min/avg/max/mdev = 0.910/1.029/1.212/0.136 ms
+[edit]
+vyos@vyos#
+
+
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+PING 2001:6a8:540:101::1(2001:6a8:540:101::1) 56 data bytes
+
+5. Voorzie een Linux client (NAT, Host-Only)
+Zorg er via de commandline voor dat de Linux client een IPv6 adres krijgt van de VyOS Router.
+Noteer de commando's die je nodig hebt:
+Om een een ip versie 6 te bekijken:
+Om via dhcpv6 (of Router Advertisements) een adres te bekomen:
+Om de ip versie 6 route te bekijken:
+Om een ip versie 6 ping uit te voeren:
+
+ubuntu@ubuntu:~$ ip -6 addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 state UNKNOWN qlen 1000
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP qlen 1000
+    inet6 2001::1/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdcb:aca9:d40a:5300:1863:23ff:fe39:a42c/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 2591946sec preferred_lft 604746sec
+    inet6 fe80::1863:23ff:fe39:a42c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: enp0s2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP qlen 1000
+    inet6 2001:6a8:540:101:4065:49ff:fe49:e3ab/64 scope global dynamic mngtmpaddr 
+       valid_lft 2591479sec preferred_lft 2073079sec
+    inet6 2001:6a8:540:101::2/64 scope global 
+       valid_lft forever preferred_lft forever
+    inet6 fdd7:4277:cab5:1226:4065:49ff:fe49:e3ab/64 scope global dynamic mngtmpaddr 
+       valid_lft 2591948sec preferred_lft 604748sec
+    inet6 fe80::4065:49ff:fe49:e3ab/64 scope link 
+       valid_lft forever preferred_lft forever
+ubuntu@ubuntu:~$ sudo systemctl restart NetworkManager
+ubuntu@ubuntu:~$ ip -6 route
+::1 dev lo proto kernel metric 256 pref medium
+2001::/64 dev enp0s1 proto kernel metric 256 pref medium
+2001:6a8:540:101::/64 dev enp0s2 proto kernel metric 256 pref medium
+fdcb:aca9:d40a:5300::/64 dev enp0s1 proto ra metric 100 expires 2591999sec pref medium
+fdd7:4277:cab5:1226::/64 dev enp0s2 proto kernel metric 256 expires 2591933sec pref medium
+fe80::/64 dev enp0s1 proto kernel metric 256 pref medium
+fe80::/64 dev enp0s2 proto kernel metric 256 pref medium
+default via fe80::1491:c4ff:fe80:a0e0 dev enp0s2 proto ra metric 1024 expires 1263sec hoplimit 64 pref medium
+ubuntu@ubuntu:~$ ping6 2001:6a8:540:101::1
+PING 2001:6a8:540:101::1(2001:6a8:540:101::1) 56 data bytes
+^C
+--- 2001:6a8:540:101::1 ping statistics ---
+8 packets transmitted, 0 received, 100% packet loss, time 7163ms
+
+ubuntu@ubuntu:~$ 
+
+
+6. Configureer VLC als streaming server
+a) Laat vlc (sudo apt-get install vlc) een film over http streamen (IPv6)
+a) Gebruik nmap om na te kijken of de IPv6 poort open staat
+(zoek op met man nmap)
+b) Gebruik op dezelfde machine als client smplayer.
+(sudo apt-get install smplayer)
+Deze moet de IPv6 stream kunnen bekijken.
+c) Gebruik tcpdump of wireshark om te verifiëren dat smplayer IPv6 gebruikt.
+
+ubuntu@ubuntu:~$ sudo apt install vlc smplayer -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  ffmpeg liba52-0.7.4 libaacs0 libaom3 libaribb24-0 libass9 libavcodec58
+  libavdevice58 libavfilter7 libavformat58 libavutil56 libbdplus0 libblas3
+  libbluray2 libbs2b0 libcddb2 libchromaprint1 libcodec2-1.0 libdav1d5
+  libdc1394-25 libdca0 libdecor-0-0 libdecor-0-plugin-1-cairo
+  libdouble-conversion3 libdvbpsi10 libdvdnav4 libdvdread8 libebml5 libfaad2
+  libflite1 libgfortran5 libgme0 libgsm1 libixml10 libkate1 liblapack3
+  liblilv-0-0 liblua5.2-0 libmad0 libmatroska7 libmd4c0 libmpcdec6 libmpeg2-4
+  libmujs1 libmysofa1 libnorm1 libnuma1 libopenal-data libopenal1
+  libopenmpt-modplug1 libopenmpt0 libpcre2-16-0 libpgm-5.3-0 libplacebo192
+  libpocketsphinx3 libpostproc55 libprotobuf-lite23 libproxy-tools
+  libqt5core5a libqt5dbus5 libqt5gui5 libqt5network5 libqt5svg5 libqt5widgets5
+  libqt5x11extras5 libqt5xml5 librabbitmq4 libresid-builder0c2a librubberband2
+  libsdl-image1.2 libsdl1.2debian libsdl2-2.0-0 libserd-0-0 libshine3
+  libsidplay2 libsixel1 libsnappy1v5 libsndio7.0 libsord-0-0 libspatialaudio0
+  libsphinxbase3 libsratom-0-0 libsrt1.4-gnutls libssh-gcrypt-4 libssh2-1
+  libswresample3 libswscale5 libudfread0 libupnp13 libva-drm2 libva-wayland2
+  libva-x11-2 libva2 libvdpau1 libvidstab1.1 libvlc-bin libvlc5 libvlccore9
+  libx264-163 libx265-199 libxcb-composite0 libxcb-xinerama0 libxcb-xinput0
+  libxvidcore4 libzimg2 libzmq5 libzvbi-common libzvbi0 mesa-va-drivers
+  mesa-vdpau-drivers mpv ocl-icd-libopencl1 pocketsphinx-en-us python3-brotli
+  python3-mutagen python3-pycryptodome python3-pyxattr python3-websockets
+  qt5-gtk-platformtheme qttranslations5-l10n rtmpdump smplayer-l10n
+  smplayer-themes va-driver-all vdpau-driver-all vlc-bin vlc-data vlc-l10n
+  vlc-plugin-access-extra vlc-plugin-base vlc-plugin-notify vlc-plugin-qt
+  vlc-plugin-samba vlc-plugin-skins2 vlc-plugin-video-output
+  vlc-plugin-video-splitter vlc-plugin-visualization yt-dlp
+Suggested packages:
+  ffmpeg-doc libcuda1 libnvcuvid1 libnvidia-encode1 libbluray-bdj libdvdcss2
+  libportaudio2 qt5-image-formats-plugins qtwayland5 serdi sndiod sordi
+  opencl-icd python-mutagen-doc python3-pyxattr-dbg python-pyxattr-doc
+  libvdpau-va-gl1 vlc-plugin-fluidsynth vlc-plugin-jack vlc-plugin-svg
+  libfribidi-bin | bidiv phantomjs
+The following NEW packages will be installed:
+  ffmpeg liba52-0.7.4 libaacs0 libaom3 libaribb24-0 libass9 libavcodec58
+  libavdevice58 libavfilter7 libavformat58 libavutil56 libbdplus0 libblas3
+  libbluray2 libbs2b0 libcddb2 libchromaprint1 libcodec2-1.0 libdav1d5
+  libdc1394-25 libdca0 libdecor-0-0 libdecor-0-plugin-1-cairo
+  libdouble-conversion3 libdvbpsi10 libdvdnav4 libdvdread8 libebml5 libfaad2
+  libflite1 libgfortran5 libgme0 libgsm1 libixml10 libkate1 liblapack3
+  liblilv-0-0 liblua5.2-0 libmad0 libmatroska7 libmd4c0 libmpcdec6 libmpeg2-4
+  libmujs1 libmysofa1 libnorm1 libnuma1 libopenal-data libopenal1
+  libopenmpt-modplug1 libopenmpt0 libpcre2-16-0 libpgm-5.3-0 libplacebo192
+  libpocketsphinx3 libpostproc55 libprotobuf-lite23 libproxy-tools
+  libqt5core5a libqt5dbus5 libqt5gui5 libqt5network5 libqt5svg5 libqt5widgets5
+  libqt5x11extras5 libqt5xml5 librabbitmq4 libresid-builder0c2a librubberband2
+  libsdl-image1.2 libsdl1.2debian libsdl2-2.0-0 libserd-0-0 libshine3
+  libsidplay2 libsixel1 libsnappy1v5 libsndio7.0 libsord-0-0 libspatialaudio0
+  libsphinxbase3 libsratom-0-0 libsrt1.4-gnutls libssh-gcrypt-4 libssh2-1
+  libswresample3 libswscale5 libudfread0 libupnp13 libva-drm2 libva-wayland2
+  libva-x11-2 libva2 libvdpau1 libvidstab1.1 libvlc-bin libvlc5 libvlccore9
+  libx264-163 libx265-199 libxcb-composite0 libxcb-xinerama0 libxcb-xinput0
+  libxvidcore4 libzimg2 libzmq5 libzvbi-common libzvbi0 mesa-va-drivers
+  mesa-vdpau-drivers mpv ocl-icd-libopencl1 pocketsphinx-en-us python3-brotli
+  python3-mutagen python3-pycryptodome python3-pyxattr python3-websockets
+  qt5-gtk-platformtheme qttranslations5-l10n rtmpdump smplayer smplayer-l10n
+  smplayer-themes va-driver-all vdpau-driver-all vlc vlc-bin vlc-data vlc-l10n
+  vlc-plugin-access-extra vlc-plugin-base vlc-plugin-notify vlc-plugin-qt
+  vlc-plugin-samba vlc-plugin-skins2 vlc-plugin-video-output
+  vlc-plugin-video-splitter vlc-plugin-visualization yt-dlp
+0 upgraded, 140 newly installed, 0 to remove and 163 not upgraded.
+Need to get 118 MB of archives.
+After this operation, 319 MB of additional disk space will be used.
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdouble-conversion3 arm64 3.1.7-4 [37.0 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libpcre2-16-0 arm64 10.39-3ubuntu0.1 [185 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libqt5core5a arm64 5.15.3+dfsg-2ubuntu0.2 [1925 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmd4c0 arm64 0.4.8-1 [41.2 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libqt5dbus5 arm64 5.15.3+dfsg-2ubuntu0.2 [224 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libqt5network5 arm64 5.15.3+dfsg-2ubuntu0.2 [743 kB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxcb-xinerama0 arm64 1.14-3ubuntu3 [5404 B]
+Get:8 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxcb-xinput0 arm64 1.14-3ubuntu3 [34.8 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libqt5gui5 arm64 5.15.3+dfsg-2ubuntu0.2 [3504 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libqt5widgets5 arm64 5.15.3+dfsg-2ubuntu0.2 [2551 kB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libqt5svg5 arm64 5.15.3-1 [147 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libnuma1 arm64 2.0.14-3ubuntu2 [22.4 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libaom3 arm64 3.3.0-1ubuntu0.1 [1415 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libva2 arm64 2.14.0-1 [63.5 kB]
+Get:15 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libva-drm2 arm64 2.14.0-1 [7266 B]
+Get:16 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libva-x11-2 arm64 2.14.0-1 [12.0 kB]
+Get:17 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libvdpau1 arm64 1.4-3build2 [25.0 kB]
+Get:18 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 ocl-icd-libopencl1 arm64 2.2.14-3 [38.8 kB]
+Get:19 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libavutil56 arm64 7:4.4.2-0ubuntu0.22.04.1 [294 kB]
+Get:20 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libcodec2-1.0 arm64 1.0.1-3 [8434 kB]
+Get:21 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdav1d5 arm64 0.9.2-1 [313 kB]
+Get:22 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libgsm1 arm64 1.0.19-1 [26.7 kB]
+Get:23 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libshine3 arm64 3.1.1-2 [22.5 kB]
+Get:24 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libsnappy1v5 arm64 1.1.8-1build3 [17.2 kB]
+Get:25 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libswresample3 arm64 7:4.4.2-0ubuntu0.22.04.1 [56.2 kB]
+Get:26 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libx264-163 arm64 2:0.163.3060+git5db6aa6-2build1 [530 kB]
+Get:27 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libx265-199 arm64 3.5-2 [699 kB]
+Get:28 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libxvidcore4 arm64 2:1.3.7-1 [161 kB]
+Get:29 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libzvbi-common all 0.2.35-19 [35.5 kB]
+Get:30 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libzvbi0 arm64 0.2.35-19 [261 kB]
+Get:31 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libavcodec58 arm64 7:4.4.2-0ubuntu0.22.04.1 [5424 kB]
+Get:32 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libass9 arm64 1:0.15.2-1 [87.8 kB]
+Get:33 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libudfread0 arm64 1.1.2-1 [15.4 kB]
+Get:34 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libbluray2 arm64 1:1.3.1-1 [148 kB]
+Get:35 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libchromaprint1 arm64 1.5.1-2 [27.3 kB]
+Get:36 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libgme0 arm64 0.6.3-2 [118 kB]
+Get:37 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libopenmpt0 arm64 0.6.1-1 [572 kB]
+Get:38 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 librabbitmq4 arm64 0.10.0-1ubuntu2 [39.3 kB]
+Get:39 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsrt1.4-gnutls arm64 1.4.4-4 [290 kB]
+Get:40 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libssh-gcrypt-4 arm64 0.9.6-2ubuntu0.22.04.4 [224 kB]
+Get:41 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libnorm1 arm64 1.5.9+dfsg-2 [202 kB]
+Get:42 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libpgm-5.3-0 arm64 5.3.128~dfsg-2 [151 kB]
+Get:43 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libzmq5 arm64 4.3.4-2 [241 kB]
+Get:44 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libavformat58 arm64 7:4.4.2-0ubuntu0.22.04.1 [1116 kB]
+Get:45 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libbs2b0 arm64 3.1.0+dfsg-2.2build1 [9548 B]
+Get:46 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libflite1 arm64 2.2-3 [13.7 MB]
+Get:47 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libserd-0-0 arm64 0.30.10-2 [37.7 kB]
+Get:48 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsord-0-0 arm64 0.16.8-2 [19.7 kB]
+Get:49 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsratom-0-0 arm64 0.6.8-1 [15.0 kB]
+Get:50 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 liblilv-0-0 arm64 0.24.12-2 [40.4 kB]
+Get:51 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmysofa1 arm64 1.2.1~dfsg0-1 [1156 kB]
+Get:52 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libblas3 arm64 3.10.0-2ubuntu1 [141 kB]
+Get:53 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libgfortran5 arm64 12.3.0-1ubuntu1~22.04.2 [417 kB]
+Get:54 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 liblapack3 arm64 3.10.0-2ubuntu1 [2009 kB]
+Get:55 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsphinxbase3 arm64 0.8+5prealpha+1-13build1 [123 kB]
+Get:56 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libpocketsphinx3 arm64 0.8.0+real5prealpha+1-14ubuntu1 [129 kB]
+Get:57 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libpostproc55 arm64 7:4.4.2-0ubuntu0.22.04.1 [39.8 kB]
+Get:58 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 librubberband2 arm64 2.0.0-2 [83.3 kB]
+Get:59 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libswscale5 arm64 7:4.4.2-0ubuntu0.22.04.1 [158 kB]
+Get:60 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libvidstab1.1 arm64 1.1.0-2 [34.0 kB]
+Get:61 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libzimg2 arm64 3.0.3+ds1-1 [117 kB]
+Get:62 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libavfilter7 arm64 7:4.4.2-0ubuntu0.22.04.1 [1432 kB]
+Get:63 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdc1394-25 arm64 2.2.6-4 [88.4 kB]
+Get:64 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libopenal-data all 1:1.19.1-2build3 [164 kB]
+Get:65 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsndio7.0 arm64 1.8.1-1.1 [28.7 kB]
+Get:66 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libopenal1 arm64 1:1.19.1-2build3 [525 kB]
+Get:67 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libdecor-0-0 arm64 0.1.0-3build1 [14.9 kB]
+Get:68 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libsdl2-2.0-0 arm64 2.0.20+dfsg-2ubuntu1.22.04.1 [558 kB]
+Get:69 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libavdevice58 arm64 7:4.4.2-0ubuntu0.22.04.1 [85.2 kB]
+Get:70 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 ffmpeg arm64 7:4.4.2-0ubuntu0.22.04.1 [1693 kB]
+Get:71 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 liba52-0.7.4 arm64 0.7.4-20 [27.7 kB]
+Get:72 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libaacs0 arm64 0.11.1-1 [59.8 kB]
+Get:73 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libaribb24-0 arm64 1.0.3-2 [25.7 kB]
+Get:74 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libbdplus0 arm64 0.2.0-1 [49.6 kB]
+Get:75 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libcddb2 arm64 1.3.2-7fakesync1 [36.5 kB]
+Get:76 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libdecor-0-plugin-1-cairo arm64 0.1.0-3build1 [18.8 kB]
+Get:77 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdvbpsi10 arm64 1.3.3-1 [42.6 kB]
+Get:78 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdvdread8 arm64 6.1.2-1 [53.7 kB]
+Get:79 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdvdnav4 arm64 6.1.1-1 [37.8 kB]
+Get:80 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libebml5 arm64 1.4.2-2 [48.2 kB]
+Get:81 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libfaad2 arm64 2.10.0-2 [203 kB]
+Get:82 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libixml10 arm64 1:1.8.4-2ubuntu2 [22.4 kB]
+Get:83 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libkate1 arm64 0.4.1-11build1 [36.5 kB]
+Get:84 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 liblua5.2-0 arm64 5.2.4-2 [121 kB]
+Get:85 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmad0 arm64 0.15.1b-10ubuntu1 [61.8 kB]
+Get:86 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmatroska7 arm64 1.6.3-2 [114 kB]
+Get:87 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmpcdec6 arm64 2:0.1~r495-2 [31.2 kB]
+Get:88 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmpeg2-4 arm64 0.5.1-9 [42.3 kB]
+Get:89 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libmujs1 arm64 1.1.3-3 [113 kB]
+Get:90 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libopenmpt-modplug1 arm64 0.8.9.0-openmpt1-2 [22.4 kB]
+Get:91 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libplacebo192 arm64 4.192.1-1 [2233 kB]
+Get:92 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 libprotobuf-lite23 arm64 3.12.4-1ubuntu7.22.04.4 [192 kB]
+Get:93 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libproxy-tools arm64 0.4.17-2 [5390 B]
+Get:94 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libqt5x11extras5 arm64 5.15.3-1 [10.9 kB]
+Get:95 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 libqt5xml5 arm64 5.15.3+dfsg-2ubuntu0.2 [126 kB]
+Get:96 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libresid-builder0c2a arm64 2.1.1-15ubuntu2 [29.1 kB]
+Get:97 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsdl1.2debian arm64 1.2.15+dfsg2-6 [161 kB]
+Get:98 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsdl-image1.2 arm64 1.2.12-13build1 [32.1 kB]
+Get:99 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsidplay2 arm64 2.1.1-15ubuntu2 [85.8 kB]
+Get:100 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libspatialaudio0 arm64 0.3.0+git20180730+dfsg1-2build1 [29.9 kB]
+Get:101 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libssh2-1 arm64 1.10.0-3 [108 kB]
+Get:102 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libupnp13 arm64 1:1.8.4-2ubuntu2 [83.3 kB]
+Get:103 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libva-wayland2 arm64 2.14.0-1 [9298 B]
+Get:104 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libvlccore9 arm64 3.0.16-1build7 [469 kB]
+Get:105 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libvlc5 arm64 3.0.16-1build7 [75.8 kB]
+Get:106 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libvlc-bin arm64 3.0.16-1build7 [17.8 kB]
+Get:107 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libxcb-composite0 arm64 1.14-3ubuntu3 [5296 B]
+Get:108 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 mesa-va-drivers arm64 23.2.1-1ubuntu3.1~22.04.3 [4018 kB]
+Get:109 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 mesa-vdpau-drivers arm64 23.2.1-1ubuntu3.1~22.04.3 [3739 kB]
+Get:110 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libsixel1 arm64 1.10.3-3 [111 kB]
+Get:111 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 mpv arm64 0.34.1-1ubuntu3 [1200 kB]
+Get:112 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-brotli arm64 1.0.9-2build6 [316 kB]
+Get:113 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-mutagen all 1.45.1-2 [135 kB]
+Get:114 http://ports.ubuntu.com/ubuntu-ports jammy-updates/main arm64 python3-pycryptodome arm64 3.11.0+dfsg1-3ubuntu0.1 [1034 kB]
+Get:115 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 python3-pyxattr arm64 0.7.2-2ubuntu2 [14.4 kB]
+Get:116 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 python3-websockets all 9.1-1 [57.1 kB]
+Get:117 http://ports.ubuntu.com/ubuntu-ports jammy-updates/universe arm64 qt5-gtk-platformtheme arm64 5.15.3+dfsg-2ubuntu0.2 [129 kB]
+Get:118 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 qttranslations5-l10n all 5.15.3-1 [1983 kB]
+Get:119 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 smplayer arm64 21.10.0~ds0-1 [1995 kB]
+Get:120 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 smplayer-l10n all 21.10.0~ds0-1 [1432 kB]
+Get:121 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 smplayer-themes all 1:20.11.0-1 [2636 kB]
+Get:122 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 va-driver-all arm64 2.14.0-1 [3952 B]
+Get:123 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 vdpau-driver-all arm64 1.4-3build2 [4510 B]
+Get:124 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-bin arm64 3.0.16-1build7 [56.6 kB]
+Get:125 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-data all 3.0.16-1build7 [349 kB]
+Get:126 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libdca0 arm64 0.0.7-2 [85.5 kB]
+Get:127 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-base arm64 3.0.16-1build7 [3080 kB]
+Get:128 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-qt arm64 3.0.16-1build7 [1076 kB]
+Get:129 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-video-output arm64 3.0.16-1build7 [161 kB]
+Get:130 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc arm64 3.0.16-1build7 [37.3 kB]
+Get:131 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-l10n all 3.0.16-1build7 [6636 kB]
+Get:132 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-access-extra arm64 3.0.16-1build7 [27.1 kB]
+Get:133 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-notify arm64 3.0.16-1build7 [19.2 kB]
+Get:134 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-samba arm64 3.0.16-1build7 [19.9 kB]
+Get:135 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-skins2 arm64 3.0.16-1build7 [501 kB]
+Get:136 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-video-splitter arm64 3.0.16-1build7 [35.8 kB]
+Get:137 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 vlc-plugin-visualization arm64 3.0.16-1build7 [45.0 kB]
+Get:138 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 yt-dlp all 2022.04.08-1 [1490 kB]
+Get:139 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 pocketsphinx-en-us all 0.8.0+real5prealpha+1-14ubuntu1 [27.6 MB]
+Get:140 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 rtmpdump arm64 2.4+20151223.gitfa8646d.1-2build4 [46.1 kB]
+Fetched 118 MB in 24s (4852 kB/s)                                              
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package libdouble-conversion3:arm64.
+(Reading database ... 216523 files and directories currently installed.)
+Preparing to unpack .../000-libdouble-conversion3_3.1.7-4_arm64.deb ...
+Unpacking libdouble-conversion3:arm64 (3.1.7-4) ...
+Selecting previously unselected package libpcre2-16-0:arm64.
+Preparing to unpack .../001-libpcre2-16-0_10.39-3ubuntu0.1_arm64.deb ...
+Unpacking libpcre2-16-0:arm64 (10.39-3ubuntu0.1) ...
+Selecting previously unselected package libqt5core5a:arm64.
+Preparing to unpack .../002-libqt5core5a_5.15.3+dfsg-2ubuntu0.2_arm64.deb ...
+Unpacking libqt5core5a:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package libmd4c0:arm64.
+Preparing to unpack .../003-libmd4c0_0.4.8-1_arm64.deb ...
+Unpacking libmd4c0:arm64 (0.4.8-1) ...
+Selecting previously unselected package libqt5dbus5:arm64.
+Preparing to unpack .../004-libqt5dbus5_5.15.3+dfsg-2ubuntu0.2_arm64.deb ...
+Unpacking libqt5dbus5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package libqt5network5:arm64.
+Preparing to unpack .../005-libqt5network5_5.15.3+dfsg-2ubuntu0.2_arm64.deb ...
+Unpacking libqt5network5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package libxcb-xinerama0:arm64.
+Preparing to unpack .../006-libxcb-xinerama0_1.14-3ubuntu3_arm64.deb ...
+Unpacking libxcb-xinerama0:arm64 (1.14-3ubuntu3) ...
+Selecting previously unselected package libxcb-xinput0:arm64.
+Preparing to unpack .../007-libxcb-xinput0_1.14-3ubuntu3_arm64.deb ...
+Unpacking libxcb-xinput0:arm64 (1.14-3ubuntu3) ...
+Selecting previously unselected package libqt5gui5:arm64.
+Preparing to unpack .../008-libqt5gui5_5.15.3+dfsg-2ubuntu0.2_arm64.deb ...
+Unpacking libqt5gui5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package libqt5widgets5:arm64.
+Preparing to unpack .../009-libqt5widgets5_5.15.3+dfsg-2ubuntu0.2_arm64.deb ...
+Unpacking libqt5widgets5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package libqt5svg5:arm64.
+Preparing to unpack .../010-libqt5svg5_5.15.3-1_arm64.deb ...
+Unpacking libqt5svg5:arm64 (5.15.3-1) ...
+Selecting previously unselected package libnuma1:arm64.
+Preparing to unpack .../011-libnuma1_2.0.14-3ubuntu2_arm64.deb ...
+Unpacking libnuma1:arm64 (2.0.14-3ubuntu2) ...
+Selecting previously unselected package libaom3:arm64.
+Preparing to unpack .../012-libaom3_3.3.0-1ubuntu0.1_arm64.deb ...
+Unpacking libaom3:arm64 (3.3.0-1ubuntu0.1) ...
+Selecting previously unselected package libva2:arm64.
+Preparing to unpack .../013-libva2_2.14.0-1_arm64.deb ...
+Unpacking libva2:arm64 (2.14.0-1) ...
+Selecting previously unselected package libva-drm2:arm64.
+Preparing to unpack .../014-libva-drm2_2.14.0-1_arm64.deb ...
+Unpacking libva-drm2:arm64 (2.14.0-1) ...
+Selecting previously unselected package libva-x11-2:arm64.
+Preparing to unpack .../015-libva-x11-2_2.14.0-1_arm64.deb ...
+Unpacking libva-x11-2:arm64 (2.14.0-1) ...
+Selecting previously unselected package libvdpau1:arm64.
+Preparing to unpack .../016-libvdpau1_1.4-3build2_arm64.deb ...
+Unpacking libvdpau1:arm64 (1.4-3build2) ...
+Selecting previously unselected package ocl-icd-libopencl1:arm64.
+Preparing to unpack .../017-ocl-icd-libopencl1_2.2.14-3_arm64.deb ...
+Unpacking ocl-icd-libopencl1:arm64 (2.2.14-3) ...
+Selecting previously unselected package libavutil56:arm64.
+Preparing to unpack .../018-libavutil56_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb ...
+Unpacking libavutil56:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package libcodec2-1.0:arm64.
+Preparing to unpack .../019-libcodec2-1.0_1.0.1-3_arm64.deb ...
+Unpacking libcodec2-1.0:arm64 (1.0.1-3) ...
+Selecting previously unselected package libdav1d5:arm64.
+Preparing to unpack .../020-libdav1d5_0.9.2-1_arm64.deb ...
+Unpacking libdav1d5:arm64 (0.9.2-1) ...
+Selecting previously unselected package libgsm1:arm64.
+Preparing to unpack .../021-libgsm1_1.0.19-1_arm64.deb ...
+Unpacking libgsm1:arm64 (1.0.19-1) ...
+Selecting previously unselected package libshine3:arm64.
+Preparing to unpack .../022-libshine3_3.1.1-2_arm64.deb ...
+Unpacking libshine3:arm64 (3.1.1-2) ...
+Selecting previously unselected package libsnappy1v5:arm64.
+Preparing to unpack .../023-libsnappy1v5_1.1.8-1build3_arm64.deb ...
+Unpacking libsnappy1v5:arm64 (1.1.8-1build3) ...
+Selecting previously unselected package libswresample3:arm64.
+Preparing to unpack .../024-libswresample3_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb 
+...
+Unpacking libswresample3:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package libx264-163:arm64.
+Preparing to unpack .../025-libx264-163_2%3a0.163.3060+git5db6aa6-2build1_arm64.
+deb ...
+Unpacking libx264-163:arm64 (2:0.163.3060+git5db6aa6-2build1) ...
+Selecting previously unselected package libx265-199:arm64.
+Preparing to unpack .../026-libx265-199_3.5-2_arm64.deb ...
+Unpacking libx265-199:arm64 (3.5-2) ...
+Selecting previously unselected package libxvidcore4:arm64.
+Preparing to unpack .../027-libxvidcore4_2%3a1.3.7-1_arm64.deb ...
+Unpacking libxvidcore4:arm64 (2:1.3.7-1) ...
+Selecting previously unselected package libzvbi-common.
+Preparing to unpack .../028-libzvbi-common_0.2.35-19_all.deb ...
+Unpacking libzvbi-common (0.2.35-19) ...
+Selecting previously unselected package libzvbi0:arm64.
+Preparing to unpack .../029-libzvbi0_0.2.35-19_arm64.deb ...
+Unpacking libzvbi0:arm64 (0.2.35-19) ...
+Selecting previously unselected package libavcodec58:arm64.
+Preparing to unpack .../030-libavcodec58_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb ..
+.
+Unpacking libavcodec58:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package libass9:arm64.
+Preparing to unpack .../031-libass9_1%3a0.15.2-1_arm64.deb ...
+Unpacking libass9:arm64 (1:0.15.2-1) ...
+Selecting previously unselected package libudfread0:arm64.
+Preparing to unpack .../032-libudfread0_1.1.2-1_arm64.deb ...
+Unpacking libudfread0:arm64 (1.1.2-1) ...
+Selecting previously unselected package libbluray2:arm64.
+Preparing to unpack .../033-libbluray2_1%3a1.3.1-1_arm64.deb ...
+Unpacking libbluray2:arm64 (1:1.3.1-1) ...
+Selecting previously unselected package libchromaprint1:arm64.
+Preparing to unpack .../034-libchromaprint1_1.5.1-2_arm64.deb ...
+Unpacking libchromaprint1:arm64 (1.5.1-2) ...
+Selecting previously unselected package libgme0:arm64.
+Preparing to unpack .../035-libgme0_0.6.3-2_arm64.deb ...
+Unpacking libgme0:arm64 (0.6.3-2) ...
+Selecting previously unselected package libopenmpt0:arm64.
+Preparing to unpack .../036-libopenmpt0_0.6.1-1_arm64.deb ...
+Unpacking libopenmpt0:arm64 (0.6.1-1) ...
+Selecting previously unselected package librabbitmq4:arm64.
+Preparing to unpack .../037-librabbitmq4_0.10.0-1ubuntu2_arm64.deb ...
+Unpacking librabbitmq4:arm64 (0.10.0-1ubuntu2) ...
+Selecting previously unselected package libsrt1.4-gnutls:arm64.
+Preparing to unpack .../038-libsrt1.4-gnutls_1.4.4-4_arm64.deb ...
+Unpacking libsrt1.4-gnutls:arm64 (1.4.4-4) ...
+Selecting previously unselected package libssh-gcrypt-4:arm64.
+Preparing to unpack .../039-libssh-gcrypt-4_0.9.6-2ubuntu0.22.04.4_arm64.deb ...
+Unpacking libssh-gcrypt-4:arm64 (0.9.6-2ubuntu0.22.04.4) ...
+Selecting previously unselected package libnorm1:arm64.
+Preparing to unpack .../040-libnorm1_1.5.9+dfsg-2_arm64.deb ...
+Unpacking libnorm1:arm64 (1.5.9+dfsg-2) ...
+Selecting previously unselected package libpgm-5.3-0:arm64.
+Preparing to unpack .../041-libpgm-5.3-0_5.3.128~dfsg-2_arm64.deb ...
+Unpacking libpgm-5.3-0:arm64 (5.3.128~dfsg-2) ...
+Selecting previously unselected package libzmq5:arm64.
+Preparing to unpack .../042-libzmq5_4.3.4-2_arm64.deb ...
+Unpacking libzmq5:arm64 (4.3.4-2) ...
+Selecting previously unselected package libavformat58:arm64.
+Preparing to unpack .../043-libavformat58_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb .
+..
+Unpacking libavformat58:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package libbs2b0:arm64.
+Preparing to unpack .../044-libbs2b0_3.1.0+dfsg-2.2build1_arm64.deb ...
+Unpacking libbs2b0:arm64 (3.1.0+dfsg-2.2build1) ...
+Selecting previously unselected package libflite1:arm64.
+Preparing to unpack .../045-libflite1_2.2-3_arm64.deb ...
+Unpacking libflite1:arm64 (2.2-3) ...
+Selecting previously unselected package libserd-0-0:arm64.
+Preparing to unpack .../046-libserd-0-0_0.30.10-2_arm64.deb ...
+Unpacking libserd-0-0:arm64 (0.30.10-2) ...
+Selecting previously unselected package libsord-0-0:arm64.
+Preparing to unpack .../047-libsord-0-0_0.16.8-2_arm64.deb ...
+Unpacking libsord-0-0:arm64 (0.16.8-2) ...
+Selecting previously unselected package libsratom-0-0:arm64.
+Preparing to unpack .../048-libsratom-0-0_0.6.8-1_arm64.deb ...
+Unpacking libsratom-0-0:arm64 (0.6.8-1) ...
+Selecting previously unselected package liblilv-0-0:arm64.
+Preparing to unpack .../049-liblilv-0-0_0.24.12-2_arm64.deb ...
+Unpacking liblilv-0-0:arm64 (0.24.12-2) ...
+Selecting previously unselected package libmysofa1:arm64.
+Preparing to unpack .../050-libmysofa1_1.2.1~dfsg0-1_arm64.deb ...
+Unpacking libmysofa1:arm64 (1.2.1~dfsg0-1) ...
+Selecting previously unselected package libblas3:arm64.
+Preparing to unpack .../051-libblas3_3.10.0-2ubuntu1_arm64.deb ...
+Unpacking libblas3:arm64 (3.10.0-2ubuntu1) ...
+Selecting previously unselected package libgfortran5:arm64.
+Preparing to unpack .../052-libgfortran5_12.3.0-1ubuntu1~22.04.2_arm64.deb ...
+Unpacking libgfortran5:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+Selecting previously unselected package liblapack3:arm64.
+Preparing to unpack .../053-liblapack3_3.10.0-2ubuntu1_arm64.deb ...
+Unpacking liblapack3:arm64 (3.10.0-2ubuntu1) ...
+Selecting previously unselected package libsphinxbase3:arm64.
+Preparing to unpack .../054-libsphinxbase3_0.8+5prealpha+1-13build1_arm64.deb ..
+.
+Unpacking libsphinxbase3:arm64 (0.8+5prealpha+1-13build1) ...
+Selecting previously unselected package libpocketsphinx3:arm64.
+Preparing to unpack .../055-libpocketsphinx3_0.8.0+real5prealpha+1-14ubuntu1_arm
+64.deb ...
+Unpacking libpocketsphinx3:arm64 (0.8.0+real5prealpha+1-14ubuntu1) ...
+Selecting previously unselected package libpostproc55:arm64.
+Preparing to unpack .../056-libpostproc55_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb .
+..
+Unpacking libpostproc55:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package librubberband2:arm64.
+Preparing to unpack .../057-librubberband2_2.0.0-2_arm64.deb ...
+Unpacking librubberband2:arm64 (2.0.0-2) ...
+Selecting previously unselected package libswscale5:arm64.
+Preparing to unpack .../058-libswscale5_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb ...
+Unpacking libswscale5:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package libvidstab1.1:arm64.
+Preparing to unpack .../059-libvidstab1.1_1.1.0-2_arm64.deb ...
+Unpacking libvidstab1.1:arm64 (1.1.0-2) ...
+Selecting previously unselected package libzimg2:arm64.
+Preparing to unpack .../060-libzimg2_3.0.3+ds1-1_arm64.deb ...
+Unpacking libzimg2:arm64 (3.0.3+ds1-1) ...
+Selecting previously unselected package libavfilter7:arm64.
+Preparing to unpack .../061-libavfilter7_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb ..
+.
+Unpacking libavfilter7:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package libdc1394-25:arm64.
+Preparing to unpack .../062-libdc1394-25_2.2.6-4_arm64.deb ...
+Unpacking libdc1394-25:arm64 (2.2.6-4) ...
+Selecting previously unselected package libopenal-data.
+Preparing to unpack .../063-libopenal-data_1%3a1.19.1-2build3_all.deb ...
+Unpacking libopenal-data (1:1.19.1-2build3) ...
+Selecting previously unselected package libsndio7.0:arm64.
+Preparing to unpack .../064-libsndio7.0_1.8.1-1.1_arm64.deb ...
+Unpacking libsndio7.0:arm64 (1.8.1-1.1) ...
+Selecting previously unselected package libopenal1:arm64.
+Preparing to unpack .../065-libopenal1_1%3a1.19.1-2build3_arm64.deb ...
+Unpacking libopenal1:arm64 (1:1.19.1-2build3) ...
+Selecting previously unselected package libdecor-0-0:arm64.
+Preparing to unpack .../066-libdecor-0-0_0.1.0-3build1_arm64.deb ...
+Unpacking libdecor-0-0:arm64 (0.1.0-3build1) ...
+Selecting previously unselected package libsdl2-2.0-0:arm64.
+Preparing to unpack .../067-libsdl2-2.0-0_2.0.20+dfsg-2ubuntu1.22.04.1_arm64.deb
+ ...
+Unpacking libsdl2-2.0-0:arm64 (2.0.20+dfsg-2ubuntu1.22.04.1) ...
+Selecting previously unselected package libavdevice58:arm64.
+Preparing to unpack .../068-libavdevice58_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb .
+..
+Unpacking libavdevice58:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package ffmpeg.
+Preparing to unpack .../069-ffmpeg_7%3a4.4.2-0ubuntu0.22.04.1_arm64.deb ...
+Unpacking ffmpeg (7:4.4.2-0ubuntu0.22.04.1) ...
+Selecting previously unselected package liba52-0.7.4:arm64.
+Preparing to unpack .../070-liba52-0.7.4_0.7.4-20_arm64.deb ...
+Unpacking liba52-0.7.4:arm64 (0.7.4-20) ...
+Selecting previously unselected package libaacs0:arm64.
+Preparing to unpack .../071-libaacs0_0.11.1-1_arm64.deb ...
+Unpacking libaacs0:arm64 (0.11.1-1) ...
+Selecting previously unselected package libaribb24-0:arm64.
+Preparing to unpack .../072-libaribb24-0_1.0.3-2_arm64.deb ...
+Unpacking libaribb24-0:arm64 (1.0.3-2) ...
+Selecting previously unselected package libbdplus0:arm64.
+Preparing to unpack .../073-libbdplus0_0.2.0-1_arm64.deb ...
+Unpacking libbdplus0:arm64 (0.2.0-1) ...
+Selecting previously unselected package libcddb2.
+Preparing to unpack .../074-libcddb2_1.3.2-7fakesync1_arm64.deb ...
+Unpacking libcddb2 (1.3.2-7fakesync1) ...
+Selecting previously unselected package libdecor-0-plugin-1-cairo:arm64.
+Preparing to unpack .../075-libdecor-0-plugin-1-cairo_0.1.0-3build1_arm64.deb ..
+.
+Unpacking libdecor-0-plugin-1-cairo:arm64 (0.1.0-3build1) ...
+Selecting previously unselected package libdvbpsi10:arm64.
+Preparing to unpack .../076-libdvbpsi10_1.3.3-1_arm64.deb ...
+Unpacking libdvbpsi10:arm64 (1.3.3-1) ...
+Selecting previously unselected package libdvdread8:arm64.
+Preparing to unpack .../077-libdvdread8_6.1.2-1_arm64.deb ...
+Unpacking libdvdread8:arm64 (6.1.2-1) ...
+Selecting previously unselected package libdvdnav4:arm64.
+Preparing to unpack .../078-libdvdnav4_6.1.1-1_arm64.deb ...
+Unpacking libdvdnav4:arm64 (6.1.1-1) ...
+Selecting previously unselected package libebml5:arm64.
+Preparing to unpack .../079-libebml5_1.4.2-2_arm64.deb ...
+Unpacking libebml5:arm64 (1.4.2-2) ...
+Selecting previously unselected package libfaad2:arm64.
+Preparing to unpack .../080-libfaad2_2.10.0-2_arm64.deb ...
+Unpacking libfaad2:arm64 (2.10.0-2) ...
+Selecting previously unselected package libixml10:arm64.
+Preparing to unpack .../081-libixml10_1%3a1.8.4-2ubuntu2_arm64.deb ...
+Unpacking libixml10:arm64 (1:1.8.4-2ubuntu2) ...
+Selecting previously unselected package libkate1:arm64.
+Preparing to unpack .../082-libkate1_0.4.1-11build1_arm64.deb ...
+Unpacking libkate1:arm64 (0.4.1-11build1) ...
+Selecting previously unselected package liblua5.2-0:arm64.
+Preparing to unpack .../083-liblua5.2-0_5.2.4-2_arm64.deb ...
+Unpacking liblua5.2-0:arm64 (5.2.4-2) ...
+Selecting previously unselected package libmad0:arm64.
+Preparing to unpack .../084-libmad0_0.15.1b-10ubuntu1_arm64.deb ...
+Unpacking libmad0:arm64 (0.15.1b-10ubuntu1) ...
+Selecting previously unselected package libmatroska7:arm64.
+Preparing to unpack .../085-libmatroska7_1.6.3-2_arm64.deb ...
+Unpacking libmatroska7:arm64 (1.6.3-2) ...
+Selecting previously unselected package libmpcdec6:arm64.
+Preparing to unpack .../086-libmpcdec6_2%3a0.1~r495-2_arm64.deb ...
+Unpacking libmpcdec6:arm64 (2:0.1~r495-2) ...
+Selecting previously unselected package libmpeg2-4:arm64.
+Preparing to unpack .../087-libmpeg2-4_0.5.1-9_arm64.deb ...
+Unpacking libmpeg2-4:arm64 (0.5.1-9) ...
+Selecting previously unselected package libmujs1:arm64.
+Preparing to unpack .../088-libmujs1_1.1.3-3_arm64.deb ...
+Unpacking libmujs1:arm64 (1.1.3-3) ...
+Selecting previously unselected package libopenmpt-modplug1:arm64.
+Preparing to unpack .../089-libopenmpt-modplug1_0.8.9.0-openmpt1-2_arm64.deb ...
+Unpacking libopenmpt-modplug1:arm64 (0.8.9.0-openmpt1-2) ...
+Selecting previously unselected package libplacebo192:arm64.
+Preparing to unpack .../090-libplacebo192_4.192.1-1_arm64.deb ...
+Unpacking libplacebo192:arm64 (4.192.1-1) ...
+Selecting previously unselected package libprotobuf-lite23:arm64.
+Preparing to unpack .../091-libprotobuf-lite23_3.12.4-1ubuntu7.22.04.4_arm64.deb
+ ...
+Unpacking libprotobuf-lite23:arm64 (3.12.4-1ubuntu7.22.04.4) ...
+Selecting previously unselected package libproxy-tools.
+Preparing to unpack .../092-libproxy-tools_0.4.17-2_arm64.deb ...
+Unpacking libproxy-tools (0.4.17-2) ...
+Selecting previously unselected package libqt5x11extras5:arm64.
+Preparing to unpack .../093-libqt5x11extras5_5.15.3-1_arm64.deb ...
+Unpacking libqt5x11extras5:arm64 (5.15.3-1) ...
+Selecting previously unselected package libqt5xml5:arm64.
+Preparing to unpack .../094-libqt5xml5_5.15.3+dfsg-2ubuntu0.2_arm64.deb ...
+Unpacking libqt5xml5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package libresid-builder0c2a.
+Preparing to unpack .../095-libresid-builder0c2a_2.1.1-15ubuntu2_arm64.deb ...
+Unpacking libresid-builder0c2a (2.1.1-15ubuntu2) ...
+Selecting previously unselected package libsdl1.2debian:arm64.
+Preparing to unpack .../096-libsdl1.2debian_1.2.15+dfsg2-6_arm64.deb ...
+Unpacking libsdl1.2debian:arm64 (1.2.15+dfsg2-6) ...
+Selecting previously unselected package libsdl-image1.2:arm64.
+Preparing to unpack .../097-libsdl-image1.2_1.2.12-13build1_arm64.deb ...
+Unpacking libsdl-image1.2:arm64 (1.2.12-13build1) ...
+Selecting previously unselected package libsidplay2.
+Preparing to unpack .../098-libsidplay2_2.1.1-15ubuntu2_arm64.deb ...
+Unpacking libsidplay2 (2.1.1-15ubuntu2) ...
+Selecting previously unselected package libspatialaudio0:arm64.
+Preparing to unpack .../099-libspatialaudio0_0.3.0+git20180730+dfsg1-2build1_arm
+64.deb ...
+Unpacking libspatialaudio0:arm64 (0.3.0+git20180730+dfsg1-2build1) ...
+Selecting previously unselected package libssh2-1:arm64.
+Preparing to unpack .../100-libssh2-1_1.10.0-3_arm64.deb ...
+Unpacking libssh2-1:arm64 (1.10.0-3) ...
+Selecting previously unselected package libupnp13:arm64.
+Preparing to unpack .../101-libupnp13_1%3a1.8.4-2ubuntu2_arm64.deb ...
+Unpacking libupnp13:arm64 (1:1.8.4-2ubuntu2) ...
+Selecting previously unselected package libva-wayland2:arm64.
+Preparing to unpack .../102-libva-wayland2_2.14.0-1_arm64.deb ...
+Unpacking libva-wayland2:arm64 (2.14.0-1) ...
+Selecting previously unselected package libvlccore9:arm64.
+Preparing to unpack .../103-libvlccore9_3.0.16-1build7_arm64.deb ...
+Unpacking libvlccore9:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package libvlc5:arm64.
+Preparing to unpack .../104-libvlc5_3.0.16-1build7_arm64.deb ...
+Unpacking libvlc5:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package libvlc-bin:arm64.
+Preparing to unpack .../105-libvlc-bin_3.0.16-1build7_arm64.deb ...
+Unpacking libvlc-bin:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package libxcb-composite0:arm64.
+Preparing to unpack .../106-libxcb-composite0_1.14-3ubuntu3_arm64.deb ...
+Unpacking libxcb-composite0:arm64 (1.14-3ubuntu3) ...
+Selecting previously unselected package mesa-va-drivers:arm64.
+Preparing to unpack .../107-mesa-va-drivers_23.2.1-1ubuntu3.1~22.04.3_arm64.deb 
+...
+Unpacking mesa-va-drivers:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+Selecting previously unselected package mesa-vdpau-drivers:arm64.
+Preparing to unpack .../108-mesa-vdpau-drivers_23.2.1-1ubuntu3.1~22.04.3_arm64.d
+eb ...
+Unpacking mesa-vdpau-drivers:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+Selecting previously unselected package libsixel1:arm64.
+Preparing to unpack .../109-libsixel1_1.10.3-3_arm64.deb ...
+Unpacking libsixel1:arm64 (1.10.3-3) ...
+Selecting previously unselected package mpv.
+Preparing to unpack .../110-mpv_0.34.1-1ubuntu3_arm64.deb ...
+Unpacking mpv (0.34.1-1ubuntu3) ...
+Selecting previously unselected package python3-brotli.
+Preparing to unpack .../111-python3-brotli_1.0.9-2build6_arm64.deb ...
+Unpacking python3-brotli (1.0.9-2build6) ...
+Selecting previously unselected package python3-mutagen.
+Preparing to unpack .../112-python3-mutagen_1.45.1-2_all.deb ...
+Unpacking python3-mutagen (1.45.1-2) ...
+Selecting previously unselected package python3-pycryptodome.
+Preparing to unpack .../113-python3-pycryptodome_3.11.0+dfsg1-3ubuntu0.1_arm64.d
+eb ...
+Unpacking python3-pycryptodome (3.11.0+dfsg1-3ubuntu0.1) ...
+Selecting previously unselected package python3-pyxattr:arm64.
+Preparing to unpack .../114-python3-pyxattr_0.7.2-2ubuntu2_arm64.deb ...
+Unpacking python3-pyxattr:arm64 (0.7.2-2ubuntu2) ...
+Selecting previously unselected package python3-websockets.
+Preparing to unpack .../115-python3-websockets_9.1-1_all.deb ...
+Unpacking python3-websockets (9.1-1) ...
+Selecting previously unselected package qt5-gtk-platformtheme:arm64.
+Preparing to unpack .../116-qt5-gtk-platformtheme_5.15.3+dfsg-2ubuntu0.2_arm64.d
+eb ...
+Unpacking qt5-gtk-platformtheme:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Selecting previously unselected package qttranslations5-l10n.
+Preparing to unpack .../117-qttranslations5-l10n_5.15.3-1_all.deb ...
+Unpacking qttranslations5-l10n (5.15.3-1) ...
+Selecting previously unselected package smplayer.
+Preparing to unpack .../118-smplayer_21.10.0~ds0-1_arm64.deb ...
+Unpacking smplayer (21.10.0~ds0-1) ...
+Selecting previously unselected package smplayer-l10n.
+Preparing to unpack .../119-smplayer-l10n_21.10.0~ds0-1_all.deb ...
+Unpacking smplayer-l10n (21.10.0~ds0-1) ...
+Selecting previously unselected package smplayer-themes.
+Preparing to unpack .../120-smplayer-themes_1%3a20.11.0-1_all.deb ...
+Unpacking smplayer-themes (1:20.11.0-1) ...
+Selecting previously unselected package va-driver-all:arm64.
+Preparing to unpack .../121-va-driver-all_2.14.0-1_arm64.deb ...
+Unpacking va-driver-all:arm64 (2.14.0-1) ...
+Selecting previously unselected package vdpau-driver-all:arm64.
+Preparing to unpack .../122-vdpau-driver-all_1.4-3build2_arm64.deb ...
+Unpacking vdpau-driver-all:arm64 (1.4-3build2) ...
+Selecting previously unselected package vlc-bin.
+Preparing to unpack .../123-vlc-bin_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-bin (3.0.16-1build7) ...
+Selecting previously unselected package vlc-data.
+Preparing to unpack .../124-vlc-data_3.0.16-1build7_all.deb ...
+Unpacking vlc-data (3.0.16-1build7) ...
+Selecting previously unselected package libdca0:arm64.
+Preparing to unpack .../125-libdca0_0.0.7-2_arm64.deb ...
+Unpacking libdca0:arm64 (0.0.7-2) ...
+Selecting previously unselected package vlc-plugin-base:arm64.
+Preparing to unpack .../126-vlc-plugin-base_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-base:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-qt:arm64.
+Preparing to unpack .../127-vlc-plugin-qt_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-qt:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-video-output:arm64.
+Preparing to unpack .../128-vlc-plugin-video-output_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-video-output:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc.
+Preparing to unpack .../129-vlc_3.0.16-1build7_arm64.deb ...
+Unpacking vlc (3.0.16-1build7) ...
+Selecting previously unselected package vlc-l10n.
+Preparing to unpack .../130-vlc-l10n_3.0.16-1build7_all.deb ...
+Unpacking vlc-l10n (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-access-extra:arm64.
+Preparing to unpack .../131-vlc-plugin-access-extra_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-access-extra:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-notify:arm64.
+Preparing to unpack .../132-vlc-plugin-notify_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-notify:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-samba:arm64.
+Preparing to unpack .../133-vlc-plugin-samba_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-samba:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-skins2:arm64.
+Preparing to unpack .../134-vlc-plugin-skins2_3.0.16-1build7_arm64.deb ...
+Unpacking vlc-plugin-skins2:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-video-splitter:arm64.
+Preparing to unpack .../135-vlc-plugin-video-splitter_3.0.16-1build7_arm64.deb .
+..
+Unpacking vlc-plugin-video-splitter:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package vlc-plugin-visualization:arm64.
+Preparing to unpack .../136-vlc-plugin-visualization_3.0.16-1build7_arm64.deb ..
+.
+Unpacking vlc-plugin-visualization:arm64 (3.0.16-1build7) ...
+Selecting previously unselected package yt-dlp.
+Preparing to unpack .../137-yt-dlp_2022.04.08-1_all.deb ...
+Unpacking yt-dlp (2022.04.08-1) ...
+Selecting previously unselected package pocketsphinx-en-us.
+Preparing to unpack .../138-pocketsphinx-en-us_0.8.0+real5prealpha+1-14ubuntu1_a
+ll.deb ...
+Unpacking pocketsphinx-en-us (0.8.0+real5prealpha+1-14ubuntu1) ...
+Selecting previously unselected package rtmpdump.
+Preparing to unpack .../139-rtmpdump_2.4+20151223.gitfa8646d.1-2build4_arm64.deb
+ ...
+Unpacking rtmpdump (2.4+20151223.gitfa8646d.1-2build4) ...
+Setting up libgme0:arm64 (0.6.3-2) ...
+Setting up libssh-gcrypt-4:arm64 (0.9.6-2ubuntu0.22.04.4) ...
+Setting up libsrt1.4-gnutls:arm64 (1.4.4-4) ...
+Setting up libmujs1:arm64 (1.1.3-3) ...
+Setting up libudfread0:arm64 (1.1.2-1) ...
+Setting up libaom3:arm64 (3.3.0-1ubuntu0.1) ...
+Setting up libebml5:arm64 (1.4.2-2) ...
+Setting up librabbitmq4:arm64 (0.10.0-1ubuntu2) ...
+Setting up libdouble-conversion3:arm64 (3.1.7-4) ...
+Setting up libkate1:arm64 (0.4.1-11build1) ...
+Setting up libdvbpsi10:arm64 (1.3.3-1) ...
+Setting up libcodec2-1.0:arm64 (1.0.1-3) ...
+Setting up libshine3:arm64 (3.1.1-2) ...
+Setting up libxcb-xinput0:arm64 (1.14-3ubuntu3) ...
+Setting up libgsm1:arm64 (1.0.19-1) ...
+Setting up libpgm-5.3-0:arm64 (5.3.128~dfsg-2) ...
+Setting up python3-pycryptodome (3.11.0+dfsg1-3ubuntu0.1) ...
+Setting up libnorm1:arm64 (1.5.9+dfsg-2) ...
+Setting up libmysofa1:arm64 (1.2.1~dfsg0-1) ...
+Setting up python3-mutagen (1.45.1-2) ...
+Setting up libspatialaudio0:arm64 (0.3.0+git20180730+dfsg1-2build1) ...
+Setting up vlc-l10n (3.0.16-1build7) ...
+Setting up libmpeg2-4:arm64 (0.5.1-9) ...
+Setting up libaribb24-0:arm64 (1.0.3-2) ...
+Setting up libxvidcore4:arm64 (2:1.3.7-1) ...
+Setting up libmpcdec6:arm64 (2:0.1~r495-2) ...
+Setting up libpcre2-16-0:arm64 (10.39-3ubuntu0.1) ...
+Setting up libsnappy1v5:arm64 (1.1.8-1build3) ...
+Setting up libcddb2 (1.3.2-7fakesync1) ...
+Setting up liba52-0.7.4:arm64 (0.7.4-20) ...
+Setting up libprotobuf-lite23:arm64 (3.12.4-1ubuntu7.22.04.4) ...
+Setting up libblas3:arm64 (3.10.0-2ubuntu1) ...
+update-alternatives: using /usr/lib/aarch64-linux-gnu/blas/libblas.so.3 to provi
+de /usr/lib/aarch64-linux-gnu/libblas.so.3 (libblas.so.3-aarch64-linux-gnu) in a
+uto mode
+Setting up libxcb-xinerama0:arm64 (1.14-3ubuntu3) ...
+Setting up libass9:arm64 (1:0.15.2-1) ...
+Setting up qttranslations5-l10n (5.15.3-1) ...
+Setting up libdvdread8:arm64 (6.1.2-1) ...
+Setting up libva2:arm64 (2.14.0-1) ...
+Setting up libixml10:arm64 (1:1.8.4-2ubuntu2) ...
+Setting up python3-brotli (1.0.9-2build6) ...
+Setting up libresid-builder0c2a (2.1.1-15ubuntu2) ...
+Setting up libx264-163:arm64 (2:0.163.3060+git5db6aa6-2build1) ...
+Setting up libfaad2:arm64 (2.10.0-2) ...
+Setting up libsdl1.2debian:arm64 (1.2.15+dfsg2-6) ...
+Setting up libsixel1:arm64 (1.10.3-3) ...
+Setting up libdc1394-25:arm64 (2.2.6-4) ...
+Setting up libplacebo192:arm64 (4.192.1-1) ...
+Setting up libaacs0:arm64 (0.11.1-1) ...
+Setting up pocketsphinx-en-us (0.8.0+real5prealpha+1-14ubuntu1) ...
+Setting up libqt5core5a:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up libgfortran5:arm64 (12.3.0-1ubuntu1~22.04.2) ...
+Setting up libvlccore9:arm64 (3.0.16-1build7) ...
+Setting up libsidplay2 (2.1.1-15ubuntu2) ...
+Setting up librubberband2:arm64 (2.0.0-2) ...
+Setting up libva-wayland2:arm64 (2.14.0-1) ...
+Setting up libsndio7.0:arm64 (1.8.1-1.1) ...
+Setting up libbdplus0:arm64 (0.2.0-1) ...
+Setting up libnuma1:arm64 (2.0.14-3ubuntu2) ...
+Setting up libvidstab1.1:arm64 (1.1.0-2) ...
+Setting up rtmpdump (2.4+20151223.gitfa8646d.1-2build4) ...
+Setting up libmad0:arm64 (0.15.1b-10ubuntu1) ...
+Setting up libxcb-composite0:arm64 (1.14-3ubuntu3) ...
+Setting up libflite1:arm64 (2.2-3) ...
+Setting up liblua5.2-0:arm64 (5.2.4-2) ...
+Setting up libva-drm2:arm64 (2.14.0-1) ...
+Setting up ocl-icd-libopencl1:arm64 (2.2.14-3) ...
+Setting up libmatroska7:arm64 (1.6.3-2) ...
+Setting up libvdpau1:arm64 (1.4-3build2) ...
+Setting up libqt5dbus5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up libbs2b0:arm64 (3.1.0+dfsg-2.2build1) ...
+Setting up libmd4c0:arm64 (0.4.8-1) ...
+Setting up libdecor-0-0:arm64 (0.1.0-3build1) ...
+Setting up libdca0:arm64 (0.0.7-2) ...
+Setting up libzimg2:arm64 (3.0.3+ds1-1) ...
+Setting up libopenal-data (1:1.19.1-2build3) ...
+Setting up libssh2-1:arm64 (1.10.0-3) ...
+Setting up mesa-va-drivers:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+Setting up libdav1d5:arm64 (0.9.2-1) ...
+Setting up libbluray2:arm64 (1:1.3.1-1) ...
+Setting up libsdl2-2.0-0:arm64 (2.0.20+dfsg-2ubuntu1.22.04.1) ...
+Setting up libva-x11-2:arm64 (2.14.0-1) ...
+Setting up libopenmpt0:arm64 (0.6.1-1) ...
+Setting up vlc-data (3.0.16-1build7) ...
+Setting up libzvbi-common (0.2.35-19) ...
+Setting up vlc-plugin-notify:arm64 (3.0.16-1build7) ...
+Setting up libdvdnav4:arm64 (6.1.1-1) ...
+Setting up libproxy-tools (0.4.17-2) ...
+Setting up vlc-plugin-samba:arm64 (3.0.16-1build7) ...
+Setting up libserd-0-0:arm64 (0.30.10-2) ...
+Setting up python3-websockets (9.1-1) ...
+Setting up python3-pyxattr:arm64 (0.7.2-2ubuntu2) ...
+Setting up mesa-vdpau-drivers:arm64 (23.2.1-1ubuntu3.1~22.04.3) ...
+Setting up libzvbi0:arm64 (0.2.35-19) ...
+Setting up liblapack3:arm64 (3.10.0-2ubuntu1) ...
+update-alternatives: using /usr/lib/aarch64-linux-gnu/lapack/liblapack.so.3 to p
+rovide /usr/lib/aarch64-linux-gnu/liblapack.so.3 (liblapack.so.3-aarch64-linux-g
+nu) in auto mode
+Setting up libsdl-image1.2:arm64 (1.2.12-13build1) ...
+Setting up libzmq5:arm64 (4.3.4-2) ...
+Setting up libsphinxbase3:arm64 (0.8+5prealpha+1-13build1) ...
+Setting up vlc-plugin-video-splitter:arm64 (3.0.16-1build7) ...
+Setting up libvlc5:arm64 (3.0.16-1build7) ...
+Setting up libopenal1:arm64 (1:1.19.1-2build3) ...
+Setting up libqt5network5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up libavutil56:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up libupnp13:arm64 (1:1.8.4-2ubuntu2) ...
+Setting up libpocketsphinx3:arm64 (0.8.0+real5prealpha+1-14ubuntu1) ...
+Setting up vlc-plugin-visualization:arm64 (3.0.16-1build7) ...
+Setting up libqt5xml5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up vlc-plugin-access-extra:arm64 (3.0.16-1build7) ...
+Setting up va-driver-all:arm64 (2.14.0-1) ...
+Setting up libdecor-0-plugin-1-cairo:arm64 (0.1.0-3build1) ...
+Setting up libpostproc55:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up yt-dlp (2022.04.08-1) ...
+Setting up libx265-199:arm64 (3.5-2) ...
+Setting up vdpau-driver-all:arm64 (1.4-3build2) ...
+Setting up libvlc-bin:arm64 (3.0.16-1build7) ...
+Setting up libsord-0-0:arm64 (0.16.8-2) ...
+Setting up libsratom-0-0:arm64 (0.6.8-1) ...
+Setting up libswscale5:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up libopenmpt-modplug1:arm64 (0.8.9.0-openmpt1-2) ...
+Setting up liblilv-0-0:arm64 (0.24.12-2) ...
+Setting up libqt5gui5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up vlc-bin (3.0.16-1build7) ...
+Setting up libqt5widgets5:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up libswresample3:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up qt5-gtk-platformtheme:arm64 (5.15.3+dfsg-2ubuntu0.2) ...
+Setting up libavcodec58:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up vlc-plugin-video-output:arm64 (3.0.16-1build7) ...
+Setting up libchromaprint1:arm64 (1.5.1-2) ...
+Setting up libqt5x11extras5:arm64 (5.15.3-1) ...
+Setting up libavformat58:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up libqt5svg5:arm64 (5.15.3-1) ...
+Setting up vlc-plugin-qt:arm64 (3.0.16-1build7) ...
+Setting up libavfilter7:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up vlc-plugin-base:arm64 (3.0.16-1build7) ...
+Setting up vlc (3.0.16-1build7) ...
+Setting up vlc-plugin-skins2:arm64 (3.0.16-1build7) ...
+Setting up libavdevice58:arm64 (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up mpv (0.34.1-1ubuntu3) ...
+Setting up ffmpeg (7:4.4.2-0ubuntu0.22.04.1) ...
+Setting up smplayer (21.10.0~ds0-1) ...
+Setting up smplayer-l10n (21.10.0~ds0-1) ...
+Setting up smplayer-themes (1:20.11.0-1) ...
+Processing triggers for desktop-file-utils (0.26-1ubuntu3) ...
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for gnome-menus (3.36.0-1ubuntu3) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.11) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for mailcap (3.70+nmu1ubuntu1) ...
+Processing triggers for libvlc-bin:arm64 (3.0.16-1build7) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 78.)
+debconf: falling back to frontend: Readline
+Scanning processes...                                                           
+Scanning candidates...                                                          
+Scanning linux images...                                                        
+Pending kernel upgrade
+----------------------
+
+Newer kernel available
+
+The currently running kernel version is 5.15.0-87-generic which is not the
+expected kernel version 5.15.0-157-generic.
+
+Restarting the system to load the new kernel will not be handled automatically,
+so you should consider rebooting.
+
+
+Restarting services...
+Daemons using outdated libraries
+--------------------------------
+
+  1. accounts-daemon.service         22. rtkit-daemon.service
+  2. apache-htcacheclean.service     23. serial-getty@ttyAMA0.service
+  3. apache2.service                 24. spice-vdagentd.service
+  4. avahi-daemon.service            25. squid.service
+  5. clamav-daemon.service           26. ssh.service
+  6. colord.service                  27. switcheroo-control.service
+  7. cron.service                    28. systemd-journald.service
+  8. cups-browsed.service            29. systemd-logind.service
+[More] ^C
+ubuntu@ubuntu:~$ cvlc /home/ubuntu/test.mp4 --sout '#http{mux=ts,dst=[2001:6a8:540:101::2]:8080/}' --ttl 12
+VLC media player 3.0.16 Vetinari (revision 3.0.13-8-g41878ff4f2)
+[0000aaaaf13cf330] dummy interface: using the dummy interface module...
+[0000ffff74002640] http access out: Consider passing --http-host=IP on the command line instead.
+[0000ffff74002640] main access out error: socket bind error: Address already in use
+[0000ffff74002640] main access out error: cannot create socket(s) for HTTP host
+[0000ffff74002640] http access out error: cannot start HTTP server
+[0000ffff74001250] stream_out_standard stream out error: no suitable sout access module for `http/ts://[2001:6a8:540:101::2]:8080/'
+[0000ffff74000e80] main stream output error: stream chain failed for `http{mux=ts,dst=[2001:6a8:540:101::2]:8080/}'
+[0000ffff8001dd60] main input error: cannot start stream output instance, aborting
+^Cubuntu@ubuntu:~sudo ss -tlnp | grep 808080
+LISTEN 0      256                *:8080            *:*    users:(("squid",pid=110834,fd=12))                                                      
+ubuntu@ubuntu:~$ sudo systemctl stop squid
+ubuntu@ubuntu:~$ sudo ss -tlnp | grep 8080
+ubuntu@ubuntu:~$ cvlc /home/ubuntu/test.mp4 --sout '#http{mux=ts,dst=[2001:6a8:540:101::2]:8090/}' --ttl 12
+VLC media player 3.0.16 Vetinari (revision 3.0.13-8-g41878ff4f2)
+[0000aaaac529f240] dummy interface: using the dummy interface module...
+[0000ffff7c002640] http access out: Consider passing --http-host=IP on the command line instead.
+[0000ffff7c4cd400] filesystem stream error: cannot open file /home/ubuntu/test.mp4 (No such file or directory)
+[0000ffff78000ca0] main input error: Your input can't be opened
+[0000ffff78000ca0] main input error: VLC is unable to open the MRL 'file:///home/ubuntu/test.mp4'. Check the log for details.
+cvlc /home/ubuntu/test.mp4 --sout '#http{mux=ts,dst=[2001:6a8:540:101::2]:8090/}' --ttl 12
+^Cubuntu@ubuntu:~cvlc /home/ubuntu/test.mp4 --sout '#http{mux=ts,dst=[2001:6a8:540:101::2]:8090/}' --ttl 1212
+VLC media player 3.0.16 Vetinari (revision 3.0.13-8-g41878ff4f2)
+[0000aaab130af240] dummy interface: using the dummy interface module...
+[0000ffff90002d70] http access out: Consider passing --http-host=IP on the command line instead.
+[0000ffff904cdb30] filesystem stream error: cannot open file /home/ubuntu/test.mp4 (No such file or directory)
+[0000ffff84000ca0] main input error: Your input can't be opened
+[0000ffff84000ca0] main input error: VLC is unable to open the MRL 'file:///home/ubuntu/test.mp4'. Check the log for details.
+^Cubuntu@ubuntu:~wget https://sample-videos.com/video321/mp4/240/big_buck_bunny_240p_1mb.mp4 -O ~/test.mp4p4
+--2025-10-08 14:00:42--  https://sample-videos.com/video321/mp4/240/big_buck_bunny_240p_1mb.mp4
+Resolving sample-videos.com (sample-videos.com)... 103.145.51.95
+Connecting to sample-videos.com (sample-videos.com)|103.145.51.95|:443... ^[c^C
+ubuntu@ubuntu:~$ wget http://download.opencontent.netflix.com.s3.amazonaws.com/CosmosLaundromat/CosmosLaundromat_2k24p_HDR_P3PQ.mp4 -O ~/test.mp4
+--2025-10-08 14:00:58--  http://download.opencontent.netflix.com.s3.amazonaws.com/CosmosLaundromat/CosmosLaundromat_2k24p_HDR_P3PQ.mp4
+Resolving download.opencontent.netflix.com.s3.amazonaws.com (download.opencontent.netflix.com.s3.amazonaws.com)... 52.217.102.100, 16.182.97.217, 52.217.75.84, ...
+Connecting to download.opencontent.netflix.com.s3.amazonaws.com (download.opencontent.netflix.com.s3.amazonaws.com)|52.217.102.100|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 729482878 (696M) [video/mp4]
+Saving to: \u2018/home/ubuntu/test.mp4\u2019
+
+/home/ubuntu/test.m 100%[===================>] 695.69M  13.5MB/s    in 62s     
+
+2025-10-08 14:02:03 (11.2 MB/s) - \u2018/home/ubuntu/test.mp4\u2019 saved [729482878/729482878]
+
+ubuntu@ubuntu:~$ cvlc ~/test.mp4 --sout '#http{mux=ts,dst=[2001:6a8:540:101::2]:8090/}' --ttl 12
+VLC media player 3.0.16 Vetinari (revision 3.0.13-8-g41878ff4f2)
+[0000aaaaeae71b50] dummy interface: using the dummy interface module...
+[0000ffff5c002640] http access out: Consider passing --http-host=IP on the command line instead.
+
+In een nieuwe terminal of aparte VM
+ubuntu@ubuntu:~$ smplayer http://[2001:6a8:540:101::2]:8090/
+Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+This is SMPlayer v. 21.10.0 (revision 10000) running on Linux
+ubuntu@ubuntu:~$ 
+
+7. Multicast?
+Kijk na of je ook vlc in IPv6 kan laten multicasten (bv via FF15::1)
+
+
